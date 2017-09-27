@@ -42,4 +42,5 @@ dependencies {
     annotationProcessor "com.github.hotchemi:permissionsdispatcher-processor:2.4.0"
 //    annotationProcessor 'com.github.bumptech.glide:compiler:4.1.1'
 
+    androidTestCompile 'com.google.code.findbugs:jsr305:3.0.1'
 }

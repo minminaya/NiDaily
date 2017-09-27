@@ -30,4 +30,5 @@ dependencies {
     testCompile 'junit:junit:4.12'
 
     compile project(path:':library')
+    androidTestCompile 'com.google.code.findbugs:jsr305:3.0.1'
 }

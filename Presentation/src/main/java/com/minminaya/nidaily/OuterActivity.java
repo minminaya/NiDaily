@@ -7,48 +7,73 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-import com.bumptech.glide.Glide;
+import com.minminaya.nidaily.base.BaseActivity;
+import com.minminaya.nidaily.home.presenter.HomeFragmentPresenter;
+import com.minminaya.nidaily.mvp.view.MvpView;
+import com.minminaya.nidaily.util.Logger;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 
-public class OuterActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+public class OuterActivity extends BaseActivity
+        implements NavigationView.OnNavigationItemSelectedListener, MvpView {
 
     @BindView(R.id.fab)
     FloatingActionButton fab;
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
+    @BindView(R.id.nav_view)
+    NavigationView navigationView;
+    @BindView(R.id.drawer_layout)
+    DrawerLayout drawer;
+
+    private HomeFragmentPresenter homeFragmentPresenter = new HomeFragmentPresenter();
+
+
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_outer);
-        ButterKnife.bind(this);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+    public int getContentView() {
+        return R.layout.activity_outer;
+    }
+
+    @Override
+    public void initView(Bundle savedInstanceState) {
         setSupportActionBar(toolbar);
 
-//        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+    }
+
+    @Override
+    public void setListeners() {
+
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
+                Logger.e("OuterActivity", "测试是否正常");
             }
         });
+    }
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+    @Override
+    public void bind() {
+        homeFragmentPresenter.attachView(this);
+        homeFragmentPresenter.textMvp();//测试mvp架构是否正常使用
+
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
-
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+    }
+
+    @Override
+    public void unBind() {
+        homeFragmentPresenter.detachView(this);
     }
 
     @Override
@@ -106,5 +131,10 @@ public class OuterActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    @Override
+    public void onFailed(Throwable throwable) {
+
     }
 }

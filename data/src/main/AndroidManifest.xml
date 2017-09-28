@@ -2,7 +2,11 @@
 
     package="com.minminaya.data">
 
-    <application android:allowBackup="true" android:label="@string/app_name"
+    <uses-permission android:name="android.permission.INTERNET" />
+    <application
+        android:name=".DataModuleApplication"
+        android:allowBackup="true"
+        android:label="@string/app_name"
         android:supportsRtl="true">
 
     </application>

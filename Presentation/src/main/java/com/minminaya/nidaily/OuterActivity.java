@@ -12,12 +12,20 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.minminaya.data.http.NetWorkForRestApi;
+import com.minminaya.data.http.model.home.BeforeModel;
 import com.minminaya.nidaily.base.BaseActivity;
 import com.minminaya.nidaily.home.presenter.HomeFragmentPresenter;
 import com.minminaya.nidaily.mvp.view.MvpView;
 import com.minminaya.nidaily.util.Logger;
 
+
 import butterknife.BindView;
+import io.reactivex.Observer;
+import io.reactivex.Scheduler;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 
 public class OuterActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener, MvpView {
@@ -32,7 +40,6 @@ public class OuterActivity extends BaseActivity
     DrawerLayout drawer;
 
     private HomeFragmentPresenter homeFragmentPresenter = new HomeFragmentPresenter();
-
 
 
     @Override
@@ -54,7 +61,14 @@ public class OuterActivity extends BaseActivity
             public void onClick(View view) {
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
-                Logger.e("OuterActivity", "测试是否正常");
+//                Logger.e("OuterActivity", "测试是否正常");
+
+                NetWorkForRestApi.getZhihuApi()
+                        .loadBeforeHomeInfo(20170202)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(beforeModelObserver);
+
             }
         });
     }
@@ -75,6 +89,29 @@ public class OuterActivity extends BaseActivity
     public void unBind() {
         homeFragmentPresenter.detachView(this);
     }
+
+    Observer<BeforeModel> beforeModelObserver = new Observer<BeforeModel>() {
+        @Override
+        public void onSubscribe(Disposable d) {
+
+        }
+
+        @Override
+        public void onNext(BeforeModel value) {
+
+            Logger.e("OuterActivity", value.getDate());
+        }
+
+        @Override
+        public void onError(Throwable e) {
+            e.printStackTrace();
+        }
+
+        @Override
+        public void onComplete() {
+
+        }
+    };
 
     @Override
     public void onBackPressed() {

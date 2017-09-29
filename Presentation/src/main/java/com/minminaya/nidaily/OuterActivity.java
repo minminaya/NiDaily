@@ -18,6 +18,7 @@ import com.minminaya.data.http.model.home.BeforeModel;
 import com.minminaya.library.util.Logger;
 import com.minminaya.nidaily.base.BaseActivity;
 import com.minminaya.nidaily.home.presenter.HomeFragmentPresenter;
+import com.minminaya.nidaily.manager.ZhuhuContentManager;
 import com.minminaya.nidaily.mvp.view.MvpView;
 
 
@@ -61,13 +62,7 @@ public class OuterActivity extends BaseActivity
             public void onClick(View view) {
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
-
-                NetWorkForRestApi.getZhihuApi()
-                        .loadBeforeHomeInfo(20170202)
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(beforeModelObserver);
-
+                ZhuhuContentManager.getData();
             }
         });
     }
@@ -89,34 +84,6 @@ public class OuterActivity extends BaseActivity
         homeFragmentPresenter.detachView(this);
     }
 
-    Observer<BeforeModel> beforeModelObserver = new Observer<BeforeModel>() {
-        @Override
-        public void onSubscribe(Disposable d) {
-
-        }
-
-        @Override
-        public void onNext(BeforeModel value) {
-
-            Logger.e("OuterActivity", value.getDate());
-//
-//            boolean isWrite = CacheAtFile.put(value, C.CacheFileString.homeCacheFileName);
-
-        }
-
-        @Override
-        public void onError(Throwable e) {
-            e.printStackTrace();
-        }
-
-        @Override
-        public void onComplete() {
-
-            BeforeModel beforeModel = (BeforeModel) CacheAtFile.getObjectAtFile("C.CacheFileString.homeCacheFileName");
-
-
-        }
-    };
 
     @Override
     public void onBackPressed() {

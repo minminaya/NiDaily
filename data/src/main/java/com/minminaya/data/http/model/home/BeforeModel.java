@@ -1,13 +1,15 @@
 package com.minminaya.data.http.model.home;
 
+import java.io.Serializable;
 import java.util.List;
 
 /** 过往消息的model,home页的接口model
  * Created by Niwa on 2017/9/28.
  */
 
-public class BeforeModel {
+public class BeforeModel implements Serializable{
 
+    private static final long serialVersionUID = 1564654564645645646L;
 
     private String date;
     private List<StoriesBean> stories;

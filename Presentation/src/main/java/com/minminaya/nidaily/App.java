@@ -2,6 +2,7 @@ package com.minminaya.nidaily;
 
 import android.app.Application;
 
+import com.blankj.utilcode.util.Utils;
 import com.minminaya.nidaily.util.Logger;
 
 /**
@@ -19,6 +20,7 @@ public class App extends Application {
     public void onCreate() {
         super.onCreate();
         INSTANCE = this;
+        Utils.init(this);
         Logger.setDevelopMode(true);
     }
 }

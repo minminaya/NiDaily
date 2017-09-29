@@ -73,5 +73,8 @@ dependencies {
     //Glide
     compile 'com.github.bumptech.glide:glide:3.7.0'
 //    compile 'com.github.bumptech.glide:glide:4.1.1'
+
+    //工具类大全
+    compile 'com.blankj:utilcode:1.9.1'
 }
 

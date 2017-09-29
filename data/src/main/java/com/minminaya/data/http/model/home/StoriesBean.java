@@ -1,11 +1,14 @@
 package com.minminaya.data.http.model.home;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * Before消息里面的stories model
  */
-public class StoriesBean {
+public class StoriesBean implements Serializable {
+
+    private static final long serialVersionUID = 15646545646499887L;
 
     private int type;
     private int id;

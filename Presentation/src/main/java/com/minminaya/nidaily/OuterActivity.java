@@ -12,6 +12,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.minminaya.data.cache.Cache;
 import com.minminaya.data.http.NetWorkForRestApi;
 import com.minminaya.data.http.model.home.BeforeModel;
 import com.minminaya.nidaily.base.BaseActivity;
@@ -22,7 +23,6 @@ import com.minminaya.nidaily.util.Logger;
 
 import butterknife.BindView;
 import io.reactivex.Observer;
-import io.reactivex.Scheduler;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
@@ -100,6 +100,9 @@ public class OuterActivity extends BaseActivity
         public void onNext(BeforeModel value) {
 
             Logger.e("OuterActivity", value.getDate());
+
+            Cache.putCacheUtilsAtHashMap("homeCacheAt");
+            Cache.getCacheUtilsAtHashMap("homeCacheAt").put("homeCacheAt", value);
         }
 
         @Override
@@ -110,6 +113,10 @@ public class OuterActivity extends BaseActivity
         @Override
         public void onComplete() {
 
+            BeforeModel beforeModel = (BeforeModel) Cache.getCacheUtilsAtHashMap("homeCacheAt").getSerializable("homeCacheAt");
+            Logger.e("OuterActivity", beforeModel.getDate());
+
+            
         }
     };
 

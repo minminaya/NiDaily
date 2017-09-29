@@ -3,7 +3,7 @@ package com.minminaya.nidaily;
 import android.app.Application;
 
 import com.blankj.utilcode.util.Utils;
-import com.minminaya.nidaily.util.Logger;
+import com.minminaya.library.util.Logger;
 
 /**
  * Created by Niwa on 2017/9/27.

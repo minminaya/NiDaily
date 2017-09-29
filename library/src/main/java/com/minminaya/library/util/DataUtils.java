@@ -10,9 +10,9 @@ import java.io.ObjectOutputStream;
 
 /**
  * @author Niwa 2017年6月2日
- * 这个是关于数据相关的工具类，例如list对象保存成本地文件
- *  file文件的操作类
- * */
+ *         这个是关于数据相关的工具类，例如list对象保存成本地文件
+ *         file文件的操作类
+ */
 public class DataUtils {
 
 
@@ -30,87 +30,96 @@ public class DataUtils {
      *
      *
      * */
-	public static void writeObject(Object object, String filePath, String fileName){
+    public static boolean writeObject(Object object, File filePath, String fileName) {
 
-		File fileDirsPath = new File(filePath);
-		if(!fileDirsPath.exists()){
-			fileDirsPath.mkdirs();//如果目录不存在，则创建目录
-		}
+        File file = new File(filePath, fileName);
+        if (!file.exists()) {
 
-		File file = new File(fileDirsPath, fileName);
-		if(!file.exists()){
+            try {
+                file.createNewFile();//如果没有该文件，则创建新文件
+            } catch (IOException e) {
+                Logger.d("DataUtils", "文件写入错误");
+                e.printStackTrace();
+            }
+        } else {
+            file.delete();//如果该文件存在则删除文件
+            try {
+                System.out.println(fileName + "文件" + "已存在" + "-------->" + "准备重新建立文件");
+                file.createNewFile();//重新建立文件
+            } catch (IOException e) {
+                Logger.d("DataUtils", "文件写入错误");
+                e.printStackTrace();
+                return false;
+            }
+            ;
+        }
 
-			try {
-				file.createNewFile();//如果没有该文件，则创建新文件
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}else{
-			file.delete();//如果该文件存在则删除文件
-			try {
-				System.out.println(fileName+"文件"+"已存在"+"-------->"+"准备重新建立文件");
-				file.createNewFile();//重新建立文件
-			} catch (IOException e) {
-				e.printStackTrace();
-			};
-		}
 
-
-		FileOutputStream fileOutputStream = null;
-		ObjectOutputStream objectOutputStream = null;
-		try {
-			fileOutputStream = new FileOutputStream(file);
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		}
-		try {
-			objectOutputStream = new ObjectOutputStream(fileOutputStream);
-			objectOutputStream.writeObject(object);
-			objectOutputStream.flush();
-			objectOutputStream.close();
-			if(fileOutputStream != null){
+        FileOutputStream fileOutputStream = null;
+        ObjectOutputStream objectOutputStream = null;
+        try {
+            fileOutputStream = new FileOutputStream(file);
+        } catch (FileNotFoundException e) {
+            Logger.d("DataUtils", "文件写入错误");
+            e.printStackTrace();
+            return false;
+        }
+        try {
+            objectOutputStream = new ObjectOutputStream(fileOutputStream);
+            objectOutputStream.writeObject(object);
+            objectOutputStream.flush();
+            objectOutputStream.close();
+            if (fileOutputStream != null) {
                 fileOutputStream.close();
             }
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
+        } catch (IOException e) {
+            Logger.d("DataUtils", "文件写入错误");
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+    }
 
-	/**
-	 * 
-	 * 读取保存的对象文件
-	 *  @param filePath 要读取的目标文件的位置
-	 *  @param fileName 目标文件名
-	 * 
-	 * */
-	public static Object readObject(String filePath, String fileName){
-		String path = filePath + "\\" + fileName;
+    /**
+     * 读取保存的对象文件
+     *
+     * @param filePath 要读取的目标文件的位置
+     * @param fileName 目标文件名
+     */
+    public static Object readObject(String filePath, String fileName) {
+        String path = filePath + "/" + fileName;
 
-		FileInputStream fileInputStream = null;
-		ObjectInputStream objectInputStream = null;
-		Object object = null;
+        FileInputStream fileInputStream = null;
+        ObjectInputStream objectInputStream = null;
+        Object object = null;
 
-		try {
-			fileInputStream = new FileInputStream(path);
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		}
-		try {
-			objectInputStream = new ObjectInputStream(fileInputStream);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+        try {
+            fileInputStream = new FileInputStream(path);
+        } catch (FileNotFoundException e) {
+            Logger.d("DataUtils", "文件读取错误");
+            e.printStackTrace();
+            return object;
+        }
+        try {
+            objectInputStream = new ObjectInputStream(fileInputStream);
+        } catch (IOException e) {
+            Logger.d("DataUtils", "文件读取错误");
+            e.printStackTrace();
+            return object;
+        }
 
-		try {
-			if (objectInputStream != null) {
+        try {
+            if (objectInputStream != null) {
                 object = objectInputStream.readObject();
             }
-		} catch (ClassNotFoundException | IOException e) {
-			e.printStackTrace();
-		}
+        } catch (ClassNotFoundException | IOException e) {
+            Logger.d("DataUtils", "文件读取错误");
+            e.printStackTrace();
+            return object;
+        }
 
-		return object;
+        return object;
 
-	}
+    }
 
 }

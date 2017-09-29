@@ -12,13 +12,13 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-import com.minminaya.data.cache.Cache;
+import com.minminaya.data.cache.CacheAtFile;
 import com.minminaya.data.http.NetWorkForRestApi;
 import com.minminaya.data.http.model.home.BeforeModel;
+import com.minminaya.library.util.Logger;
 import com.minminaya.nidaily.base.BaseActivity;
 import com.minminaya.nidaily.home.presenter.HomeFragmentPresenter;
 import com.minminaya.nidaily.mvp.view.MvpView;
-import com.minminaya.nidaily.util.Logger;
 
 
 import butterknife.BindView;
@@ -61,7 +61,6 @@ public class OuterActivity extends BaseActivity
             public void onClick(View view) {
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
-//                Logger.e("OuterActivity", "测试是否正常");
 
                 NetWorkForRestApi.getZhihuApi()
                         .loadBeforeHomeInfo(20170202)
@@ -100,9 +99,9 @@ public class OuterActivity extends BaseActivity
         public void onNext(BeforeModel value) {
 
             Logger.e("OuterActivity", value.getDate());
+//
+//            boolean isWrite = CacheAtFile.put(value, C.CacheFileString.homeCacheFileName);
 
-            Cache.putCacheUtilsAtHashMap("homeCacheAt");
-            Cache.getCacheUtilsAtHashMap("homeCacheAt").put("homeCacheAt", value);
         }
 
         @Override
@@ -113,10 +112,9 @@ public class OuterActivity extends BaseActivity
         @Override
         public void onComplete() {
 
-            BeforeModel beforeModel = (BeforeModel) Cache.getCacheUtilsAtHashMap("homeCacheAt").getSerializable("homeCacheAt");
-            Logger.e("OuterActivity", beforeModel.getDate());
+            BeforeModel beforeModel = (BeforeModel) CacheAtFile.getObjectAtFile("C.CacheFileString.homeCacheFileName");
 
-            
+
         }
     };
 

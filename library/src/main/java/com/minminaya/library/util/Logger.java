@@ -1,4 +1,4 @@
-package com.minminaya.nidaily.util;
+package com.minminaya.library.util;
 
 import android.text.TextUtils;
 import android.util.Log;

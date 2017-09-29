@@ -12,21 +12,13 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-import com.minminaya.data.cache.CacheAtFile;
-import com.minminaya.data.http.NetWorkForRestApi;
-import com.minminaya.data.http.model.home.BeforeModel;
-import com.minminaya.library.util.Logger;
 import com.minminaya.nidaily.base.BaseActivity;
 import com.minminaya.nidaily.home.presenter.HomeFragmentPresenter;
-import com.minminaya.nidaily.manager.ZhuhuContentManager;
+import com.minminaya.nidaily.manager.ZhihuContentManager;
 import com.minminaya.nidaily.mvp.view.MvpView;
 
 
 import butterknife.BindView;
-import io.reactivex.Observer;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.schedulers.Schedulers;
 
 public class OuterActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener, MvpView {
@@ -62,7 +54,7 @@ public class OuterActivity extends BaseActivity
             public void onClick(View view) {
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
-                ZhuhuContentManager.getData();
+                ZhihuContentManager.getData();
             }
         });
     }
@@ -83,6 +75,7 @@ public class OuterActivity extends BaseActivity
     public void unBind() {
         homeFragmentPresenter.detachView(this);
     }
+
 
 
     @Override

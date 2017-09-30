@@ -1,32 +1,38 @@
 package com.minminaya.nidaily.home.fragment;
 
 
-import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
+import com.minminaya.data.http.model.home.BeforeModel;
 import com.minminaya.library.util.Logger;
 import com.minminaya.nidaily.App;
+import com.minminaya.nidaily.C;
 import com.minminaya.nidaily.R;
 import com.minminaya.nidaily.base.BaseFragment;
 import com.minminaya.nidaily.home.adapter.HomeRecyclerViewAdapter;
 import com.minminaya.nidaily.home.presenter.HomeFragmentPresenter;
+import com.minminaya.nidaily.manager.ZhihuContentManager;
 import com.minminaya.nidaily.mvp.view.MvpView;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import butterknife.BindView;
 
 /**
  * 主页的Fragment
  */
-public class HomeFragment extends BaseFragment implements MvpView{
+public class HomeFragment extends BaseFragment implements MvpView {
     private static final HomeFragment homeFragment = new HomeFragment();
 
     @BindView(R.id.recycler_view_home_fragment)
     XRecyclerView recyclerView;
+    HomeRecyclerViewAdapter mHomeRecyclerViewAdapter;
 
+    BeforeModel beforeModel = null;
 
     private HomeFragmentPresenter homeFragmentPresenter = new HomeFragmentPresenter();
 
@@ -45,6 +51,9 @@ public class HomeFragment extends BaseFragment implements MvpView{
     @Override
     public void iniView(View view) {
         Logger.e("HomeFragment", "iniView");
+
+        EventBus.getDefault().register(this);
+
     }
 
     @Override
@@ -55,9 +64,16 @@ public class HomeFragment extends BaseFragment implements MvpView{
         homeFragmentPresenter.textMvp();//测试mvp架构是否正常使用
 
         recyclerView.setLayoutManager(new LinearLayoutManager(App.getINSTANCE()));
-        HomeRecyclerViewAdapter mHomeRecyclerViewAdapter = new HomeRecyclerViewAdapter();
+        mHomeRecyclerViewAdapter = new HomeRecyclerViewAdapter();
         recyclerView.setAdapter(mHomeRecyclerViewAdapter);
+
+        Object object = ZhihuContentManager.getInstance().getData();
+        if (object != null) {
+            beforeModel = (BeforeModel) object;
+            notifyRecyvlerViewAdapter();
+        }
     }
+
 
     @Override
     public void setListeners() {
@@ -78,4 +94,23 @@ public class HomeFragment extends BaseFragment implements MvpView{
     public void onFailed(Throwable throwable) {
 
     }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void getEventBusEvent(Integer index) {
+        switch (index) {
+            case C.EventBusString.FROM_HTTPMANAGER_TO_ZHIHU_CONTENT_MANAGER:
+                Logger.e("ZhihuContentManager", "getEventBusEvent");
+                beforeModel = (BeforeModel) ZhihuContentManager.getInstance().getData();
+                Logger.e("ZhihuContentManager", "getEventBusEvent：" + beforeModel.getDate());
+                notifyRecyvlerViewAdapter();
+                break;
+        }
+    }
+
+    private void notifyRecyvlerViewAdapter() {
+        mHomeRecyclerViewAdapter.setBeforeModel(beforeModel);
+        mHomeRecyclerViewAdapter.notifyDataSetChanged();
+    }
+
+
 }

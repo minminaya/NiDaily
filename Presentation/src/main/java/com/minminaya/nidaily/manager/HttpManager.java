@@ -6,6 +6,8 @@ import com.minminaya.data.http.model.home.BeforeModel;
 import com.minminaya.library.util.Logger;
 import com.minminaya.nidaily.C;
 
+import org.greenrobot.eventbus.EventBus;
+
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
@@ -46,6 +48,7 @@ public class HttpManager {
             if (isWrited) {
                 Logger.d("HttpManager", "HttpManager:缓存数据成功");
                 //EvenBus 1事件发送
+                EventBus.getDefault().post(C.EventBusString.FROM_HTTPMANAGER_TO_ZHIHU_CONTENT_MANAGER);
             }
         }
 

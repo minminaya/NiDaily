@@ -7,6 +7,10 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.minminaya.data.http.model.home.BeforeModel;
+import com.minminaya.library.util.Logger;
+import com.minminaya.nidaily.App;
 import com.minminaya.nidaily.R;
 
 import butterknife.BindView;
@@ -18,7 +22,20 @@ import butterknife.ButterKnife;
  */
 
 public class HomeRecyclerViewAdapter extends RecyclerView.Adapter<HomeRecyclerViewAdapter.ViewHolderA> {
+    private BeforeModel beforeModel;
 
+    public HomeRecyclerViewAdapter() {
+        Logger.d("HomeRecyclerViewAdapter", "HomeRecyclerViewAdapter构造");
+    }
+
+    public BeforeModel getBeforeModel() {
+        return beforeModel;
+    }
+
+    public void setBeforeModel(BeforeModel beforeModel) {
+        this.beforeModel = beforeModel;
+        Logger.d("HomeRecyclerViewAdapter", "beforeModel:" + beforeModel.getDate());
+    }
 
     @Override
     public ViewHolderA onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -29,12 +46,15 @@ public class HomeRecyclerViewAdapter extends RecyclerView.Adapter<HomeRecyclerVi
 
     @Override
     public void onBindViewHolder(ViewHolderA holder, int position) {
-
+        if(beforeModel != null){
+            holder.tvHomeRecyclerViewItem.setText(beforeModel.getStories().get(position).getTitle());
+            Glide.with(App.getINSTANCE()).load(beforeModel.getStories().get(position).getImages().get(0)).into(holder.imgHomeRecyclerViewItem);
+        }
     }
 
     @Override
     public int getItemCount() {
-        return 5;
+        return (beforeModel != null) ? beforeModel.getStories().size() : 0;
     }
 
     class ViewHolderA extends RecyclerView.ViewHolder {

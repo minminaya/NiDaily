@@ -3,7 +3,12 @@ package com.minminaya.nidaily.manager;
 import com.minminaya.data.cache.CacheAtFileManage;
 import com.minminaya.data.http.model.home.BeforeModel;
 import com.minminaya.library.util.Logger;
+import com.minminaya.nidaily.App;
 import com.minminaya.nidaily.C;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 /**
  * 知乎RestAPI数据的管理类
@@ -13,33 +18,24 @@ import com.minminaya.nidaily.C;
 
 public class ZhihuContentManager {
 
-    public static void getData() {
+    private static final ZhihuContentManager mZhihuContentManager = new ZhihuContentManager();
+
+    public static ZhihuContentManager getInstance() {
+        return mZhihuContentManager;
+    }
+    public Object getData() {
         //首先读取缓存中的数据
         Object object = CacheAtFileManage.getObjectAtFile(C.CacheFileString.homeCacheFileName);
         //如果不为空，则使用，为空，则重新访问网络下载到缓存
         if (object != null) {
-
-            processData(object);
-
+            Logger.e("ZhihuContentManager", "object不为空");
+            return object;
         } else {
+
             HttpManager httpManager = new HttpManager();
             httpManager.connectRestAPI();
-            // TODO: 2017/9/29 对数据的处理，这里请求网络获取数据有一定延迟，不能在下面处理数据，设定回调才可
-
         }
+        return null;
     }
-
-    /**
-     * <p>处理数据，显示啊啥的</p>
-     * Envenbus 1事件接收点
-     */
-    private static void processData(Object object) {
-
-        BeforeModel beforeModel = (BeforeModel) object;
-        Logger.e("ZhuhuContentManager", "ZhuhuContentManager里：" + beforeModel.getDate());
-
-        // TODO: 2017/9/29 对数据的处理
-    }
-
 
 }

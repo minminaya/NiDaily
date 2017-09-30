@@ -9,7 +9,11 @@ public class C {
 
 
     public static class CacheFileString {
-        public static final String homeCacheFileName = "homeCacheFileName";
+        public static final String homeCacheFileName = "homeCacheFileName333366665";
+    }
+
+    public static class EventBusString {
+        public static final int FROM_HTTPMANAGER_TO_ZHIHU_CONTENT_MANAGER = 0x68479631;
     }
 
 

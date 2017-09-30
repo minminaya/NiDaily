@@ -29,6 +29,7 @@ public class CacheAtFileManage {
     public static Object getObjectAtFile(String cacheName) {
 
         Object object = DataUtils.readObject(Utils.getApp().getCacheDir().getAbsolutePath(), cacheName);
+
         return object;
     }
 

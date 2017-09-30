@@ -79,6 +79,8 @@ public abstract class BaseFragment extends RxFragment {
         super.onDestroy();
         mPrepared = false;
         unBind();
+        //取消ButterKnife的绑定
+        unbinder.unbind();
     }
 
     protected abstract void unBind();

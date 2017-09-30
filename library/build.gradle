@@ -76,5 +76,8 @@ dependencies {
 
     //工具类大全
     compile 'com.blankj:utilcode:1.9.1'
+
+    //Eventbus
+    compile 'org.greenrobot:eventbus:3.0.0'
 }
 

@@ -1,38 +1,44 @@
 package com.minminaya.nidaily;
 
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
+import android.support.annotation.NonNull;
+import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
+import android.widget.FrameLayout;
 
+import com.blankj.utilcode.util.FragmentUtils;
+import com.minminaya.library.util.Logger;
 import com.minminaya.nidaily.base.BaseActivity;
+import com.minminaya.nidaily.home.fragment.HomeFragment;
 import com.minminaya.nidaily.home.presenter.HomeFragmentPresenter;
-import com.minminaya.nidaily.manager.ZhihuContentManager;
 import com.minminaya.nidaily.mvp.view.MvpView;
 
-
 import butterknife.BindView;
+import butterknife.ButterKnife;
 
 public class OuterActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener, MvpView {
 
-    @BindView(R.id.fab)
-    FloatingActionButton fab;
     @BindView(R.id.toolbar)
     Toolbar toolbar;
     @BindView(R.id.nav_view)
     NavigationView navigationView;
     @BindView(R.id.drawer_layout)
     DrawerLayout drawer;
+    @BindView(R.id.frame_layout_content)
+    FrameLayout frameLayoutContent;
+    @BindView(R.id.bottom_navigation)
+    BottomNavigationView bottomNavigation;
 
-    private HomeFragmentPresenter homeFragmentPresenter = new HomeFragmentPresenter();
+    FragmentManager mFragmentManager = getSupportFragmentManager();
+
 
 
     @Override
@@ -43,26 +49,36 @@ public class OuterActivity extends BaseActivity
     @Override
     public void initView(Bundle savedInstanceState) {
         setSupportActionBar(toolbar);
+        //添加Fragment
+        FragmentUtils.addFragment(mFragmentManager, HomeFragment.getInstance(), R.id.frame_layout_content, true);
 
+        FragmentUtils.showFragment(HomeFragment.getInstance());
     }
 
     @Override
     public void setListeners() {
-
-        fab.setOnClickListener(new View.OnClickListener() {
+        bottomNavigation.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-                ZhihuContentManager.getData();
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+
+                switch (item.getItemId()) {
+                    case R.id.home:
+                        FragmentUtils.showFragment(HomeFragment.getInstance());
+                        Logger.e("OuterActivity", "home");
+                        break;
+                    case R.id.topic:
+                        break;
+                    case R.id.column:
+                        break;
+                }
+                return true;
             }
         });
     }
 
     @Override
     public void bind() {
-        homeFragmentPresenter.attachView(this);
-        homeFragmentPresenter.textMvp();//测试mvp架构是否正常使用
+
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -73,9 +89,7 @@ public class OuterActivity extends BaseActivity
 
     @Override
     public void unBind() {
-        homeFragmentPresenter.detachView(this);
     }
-
 
 
     @Override
@@ -139,4 +153,5 @@ public class OuterActivity extends BaseActivity
     public void onFailed(Throwable throwable) {
 
     }
+
 }

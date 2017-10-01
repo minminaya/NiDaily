@@ -3,10 +3,11 @@ package com.minminaya.nidaily.content.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.Html;
 import android.webkit.WebView;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.minminaya.data.http.NetWorkForRestApi;
 import com.minminaya.data.http.model.content.ContentModel;
 import com.minminaya.library.util.Logger;
@@ -16,6 +17,7 @@ import com.minminaya.nidaily.base.BaseActivity;
 import com.minminaya.nidaily.util.HtmlUtil;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
@@ -28,8 +30,12 @@ import io.reactivex.schedulers.Schedulers;
 public class WebContentActivity extends BaseActivity {
     @BindView(R.id.web_view_web_content)
     WebView webViewWebContent;
-    //    @BindView(R.id.tv)
-//    TextView tv;
+    @BindView(R.id.img_at_web_content_activity)
+    ImageView img;
+    @BindView(R.id.tv_detail_title_at_web_content_activity)
+    TextView tvDetailTitle;
+    @BindView(R.id.tv_image_source_at_web_content_activity)
+    TextView tvImageSource;
     /**
      * 当前item的id
      */
@@ -59,6 +65,8 @@ public class WebContentActivity extends BaseActivity {
         if (intent != null) {
             id = intent.getIntExtra(C.ActivityLoadString.LOAD_CONTENT_ACTIVITY, -1);
         }
+
+
     }
 
     @Override
@@ -90,10 +98,17 @@ public class WebContentActivity extends BaseActivity {
         @Override
         public void onNext(ContentModel value) {
 
-
+            //webView中的内容
             String htmlData = HtmlUtil.createHtmlData(value);
-
             webViewWebContent.loadData(htmlData, HtmlUtil.MIME_TYPE, HtmlUtil.ENCODING);
+
+            Glide.with(WebContentActivity.this).load(value.getImage()).into(img);
+
+            tvDetailTitle.setText(value.getTitle());
+
+            tvImageSource.setText(value.getImage_source());
+
+
         }
 
         @Override

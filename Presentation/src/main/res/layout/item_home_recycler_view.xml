@@ -4,12 +4,12 @@
     android:id="@+id/card_view_at_home_recycler_view_item"
     android:layout_width="match_parent"
     android:layout_height="100dp"
-    android:layout_margin="3dp"
+    android:layout_margin="5dp"
     android:clickable="true"
     android:foreground="?android:attr/selectableItemBackground"
     android:orientation="vertical"
     app:cardCornerRadius="10dp"
-    app:cardElevation="8dp">
+    app:cardElevation="6dp">
 
     <RelativeLayout
         android:layout_width="match_parent"

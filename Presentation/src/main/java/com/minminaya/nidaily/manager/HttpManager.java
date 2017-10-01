@@ -29,7 +29,7 @@ public class HttpManager {
     public void connectRestAPI() {
 
         NetWorkForRestApi.getZhihuApi()
-                .loadBeforeHomeInfo(20170202)
+                .loadBeforeHomeInfo(20171002)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(beforeModelObserver);

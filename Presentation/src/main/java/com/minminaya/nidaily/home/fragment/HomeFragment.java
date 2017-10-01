@@ -52,7 +52,10 @@ public class HomeFragment extends BaseFragment implements MvpView {
     public void iniView(View view) {
         Logger.e("HomeFragment", "iniView");
 
-        EventBus.getDefault().register(this);
+        //注册EventBus
+        if (!EventBus.getDefault().isRegistered(this)) {
+            EventBus.getDefault().register(this);
+        }
 
     }
 
@@ -95,6 +98,9 @@ public class HomeFragment extends BaseFragment implements MvpView {
 
     }
 
+    /**
+     * 接收来自HttpManager端EventBus的通知，然后重新读取本地数据，通知RecyclerView更新数据
+     */
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void getEventBusEvent(Integer index) {
         switch (index) {
@@ -107,6 +113,9 @@ public class HomeFragment extends BaseFragment implements MvpView {
         }
     }
 
+    /**
+     * 将BeforeModel设置到Adapter，并通知更新数据
+     */
     private void notifyRecyvlerViewAdapter() {
         mHomeRecyclerViewAdapter.setBeforeModel(beforeModel);
         mHomeRecyclerViewAdapter.notifyDataSetChanged();

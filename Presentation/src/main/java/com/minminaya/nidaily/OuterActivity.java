@@ -67,8 +67,12 @@ public class OuterActivity extends BaseActivity
                         Logger.e("OuterActivity", "home");
                         break;
                     case R.id.topic:
+                        FragmentUtils.hideFragment(HomeFragment.getInstance());
+                        Logger.e("OuterActivity", "topic");
                         break;
                     case R.id.column:
+                        FragmentUtils.showFragment(HomeFragment.getInstance());
+                        Logger.e("OuterActivity", "column");
                         break;
                 }
                 return true;

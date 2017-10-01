@@ -1,5 +1,6 @@
 package com.minminaya.nidaily.home.adapter;
 
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +13,7 @@ import com.minminaya.data.http.model.home.BeforeModel;
 import com.minminaya.library.util.Logger;
 import com.minminaya.nidaily.App;
 import com.minminaya.nidaily.R;
+import com.minminaya.nidaily.content.activity.WebContentActivity;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -45,10 +47,16 @@ public class HomeRecyclerViewAdapter extends RecyclerView.Adapter<HomeRecyclerVi
     }
 
     @Override
-    public void onBindViewHolder(ViewHolderA holder, int position) {
+    public void onBindViewHolder(ViewHolderA holder, final int position) {
         if(beforeModel != null){
             holder.tvHomeRecyclerViewItem.setText(beforeModel.getStories().get(position).getTitle());
             Glide.with(App.getINSTANCE()).load(beforeModel.getStories().get(position).getImages().get(0)).into(holder.imgHomeRecyclerViewItem);
+            holder.cardView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    WebContentActivity.lanuch(App.getINSTANCE(), beforeModel.getStories().get(position).getId());
+                }
+            });
         }
     }
 
@@ -58,7 +66,8 @@ public class HomeRecyclerViewAdapter extends RecyclerView.Adapter<HomeRecyclerVi
     }
 
     class ViewHolderA extends RecyclerView.ViewHolder {
-
+        @BindView(R.id.card_view_at_home_recycler_view_item)
+        CardView cardView;
         @BindView(R.id.tv_home_recycler_view_item)
         TextView tvHomeRecyclerViewItem;
         @BindView(R.id.img_home_recycler_view_item)

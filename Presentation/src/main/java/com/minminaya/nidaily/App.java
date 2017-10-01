@@ -22,5 +22,8 @@ public class App extends Application {
         INSTANCE = this;
         Utils.init(this);
         Logger.setDevelopMode(true);
+
+
+
     }
 }

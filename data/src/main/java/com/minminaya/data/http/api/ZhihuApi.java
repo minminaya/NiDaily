@@ -1,5 +1,6 @@
 package com.minminaya.data.http.api;
 
+import com.minminaya.data.http.model.content.ContentModel;
 import com.minminaya.data.http.model.home.BeforeModel;
 
 import io.reactivex.Observable;
@@ -25,6 +26,11 @@ public interface ZhihuApi {
     @GET("4/news/before/{path}")
     Observable<BeforeModel> loadBeforeHomeInfo(
             @Path("path") Integer date
+    );
+
+    @GET("4/news/{id}")
+    Observable<ContentModel> loadContent(
+            @Path("id") Integer id
     );
 
 }

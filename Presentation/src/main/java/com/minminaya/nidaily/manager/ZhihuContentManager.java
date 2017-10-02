@@ -46,9 +46,10 @@ public class ZhihuContentManager {
             Logger.e("ZhihuContentManager getContentFromId", "object不为空");
             return object;
         } else {
+            Logger.e("ZhihuContentManager getContentFromId", "object为空");
             HttpManager.getInstance().loadContentDataFromId(contentId);
+            return null;
         }
-        return null;
     }
 
 }

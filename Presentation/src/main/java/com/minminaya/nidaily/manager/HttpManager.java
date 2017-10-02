@@ -89,6 +89,7 @@ public class HttpManager {
         }
     };
 
+
     Observer<BeforeModel> beforeModelObserver = new Observer<BeforeModel>() {
         @Override
         public void onSubscribe(Disposable d) {

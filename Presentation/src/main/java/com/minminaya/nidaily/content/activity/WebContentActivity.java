@@ -8,9 +8,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.minminaya.data.http.NetWorkForRestApi;
 import com.minminaya.data.http.model.content.ContentModel;
-import com.minminaya.data.http.model.home.BeforeModel;
 import com.minminaya.library.util.Logger;
 import com.minminaya.nidaily.C;
 import com.minminaya.nidaily.R;
@@ -23,11 +21,6 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
-import io.reactivex.Observer;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.schedulers.Schedulers;
 
 /**
  * 根据id加载相应的item详情
@@ -79,7 +72,9 @@ public class WebContentActivity extends BaseActivity {
         if (intent != null) {
             id = intent.getIntExtra(C.ActivityLoadString.LOAD_CONTENT_ACTIVITY, -1);
             contentModel = (ContentModel) ZhihuContentManager.getInstance().getContentFromId(id);
-            setViewData(contentModel);
+            if (contentModel != null) {
+                setViewData(contentModel);
+            }
         }
 
     }
@@ -92,54 +87,13 @@ public class WebContentActivity extends BaseActivity {
     @Override
     public void bind() {
 
-//        //加载数据
-//        NetWorkForRestApi.getZhihuApi()
-//                .loadContent(id)
-//                .observeOn(AndroidSchedulers.mainThread())
-//                .subscribeOn(Schedulers.io())
-//                .subscribe(observer);
-
 
     }
 
     @Override
     public void unBind() {
-
+        EventBus.getDefault().unregister(this);
     }
-
-//    Observer<ContentModel> observer = new Observer<ContentModel>() {
-//        @Override
-//        public void onSubscribe(Disposable d) {
-//
-//        }
-//
-//        @Override
-//        public void onNext(ContentModel value) {
-//
-//            //webView中的内容
-//            String htmlData = HtmlUtil.createHtmlData(value);
-//            webViewWebContent.loadData(htmlData, HtmlUtil.MIME_TYPE, HtmlUtil.ENCODING);
-//
-//            Glide.with(WebContentActivity.this).load(value.getImage()).into(img);
-//
-//            tvDetailTitle.setText(value.getTitle());
-//
-//            tvImageSource.setText(value.getImage_source());
-//
-//
-//        }
-//
-//        @Override
-//        public void onError(Throwable e) {
-//            e.printStackTrace();
-//        }
-//
-//        @Override
-//        public void onComplete() {
-//            Logger.d("WebContentActivity", "加载成功");
-//        }
-//    };
-
 
     /**
      * 接收来自HttpManager端EventBus的通知，然后重新读取本地数据，通知RecyclerView更新数据
@@ -156,8 +110,12 @@ public class WebContentActivity extends BaseActivity {
         EventBus.getDefault().cancelEventDelivery(index);
     }
 
-
+    /**
+     * 将contentModel中数据设置到view中
+     */
     private void setViewData(ContentModel contentModel) {
+
+        Logger.e("WebContentActivity setViewData", "id:" + contentModel.getId());
         //webView中的内容
         String htmlData = HtmlUtil.createHtmlData(contentModel);
         webViewWebContent.loadData(htmlData, HtmlUtil.MIME_TYPE, HtmlUtil.ENCODING);

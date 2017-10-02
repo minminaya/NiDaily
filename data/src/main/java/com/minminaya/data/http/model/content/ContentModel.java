@@ -1,12 +1,15 @@
 package com.minminaya.data.http.model.content;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * Created by Niwa on 2017/10/1.
  */
 
-public class ContentModel {
+public class ContentModel implements Serializable{
+
+    private static final long serialVersionUID = 1564654564941399411L;
 
     /**
      * body : <div class="main-wrap content-wrap">

@@ -71,6 +71,7 @@ public class HomeFragment extends BaseFragment implements MvpView {
         recyclerView.setAdapter(mHomeRecyclerViewAdapter);
 
         Object object = ZhihuContentManager.getInstance().getData();
+
         if (object != null) {
             beforeModel = (BeforeModel) object;
             notifyRecyvlerViewAdapter();
@@ -101,7 +102,7 @@ public class HomeFragment extends BaseFragment implements MvpView {
     /**
      * 接收来自HttpManager端EventBus的通知，然后重新读取本地数据，通知RecyclerView更新数据
      */
-    @Subscribe(threadMode = ThreadMode.MAIN)
+    @Subscribe(threadMode = ThreadMode.MAIN, priority = 1)
     public void getEventBusEvent(Integer index) {
         switch (index) {
             case C.EventBusString.FROM_HTTPMANAGER_TO_ZHIHU_CONTENT_MANAGER:

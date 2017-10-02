@@ -23,6 +23,7 @@ public class ZhihuContentManager {
     public static ZhihuContentManager getInstance() {
         return mZhihuContentManager;
     }
+
     public Object getData() {
         //首先读取缓存中的数据
         Object object = CacheAtFileManage.getObjectAtFile(C.CacheFileString.homeCacheFileName);
@@ -32,8 +33,20 @@ public class ZhihuContentManager {
             return object;
         } else {
 
-            HttpManager httpManager = new HttpManager();
-            httpManager.connectRestAPI();
+            HttpManager.getInstance().connectRestAPI();
+        }
+        return null;
+    }
+
+    public Object getContentFromId(Integer contentId) {
+        //首先读取缓存中的数据
+        Object object = CacheAtFileManage.getObjectAtFile(C.CacheFileString.CONTENT_CACHE_AND_ID_IS + contentId);
+        //如果不为空，则使用，为空，则重新访问网络下载到缓存
+        if (object != null) {
+            Logger.e("ZhihuContentManager getContentFromId", "object不为空");
+            return object;
+        } else {
+            HttpManager.getInstance().loadContentDataFromId(contentId);
         }
         return null;
     }

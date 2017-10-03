@@ -12,8 +12,8 @@ public class C {
 
 
     public static class CacheFileString {
-        public static final String homeCacheFileName = "homeCacheFileName333366665";
-        public static final String CONTENT_CACHE_AND_ID_IS = "content_cache_and_id_is";
+        public static final String HOME_CACHE_FILE_NAME_DATE_IS = "homeCacheFileName_Date_is_";
+        public static final String CONTENT_CACHE_AND_ID_IS = "content_cache_and_id_is_";
     }
 
     public static class ActivityLoadString {

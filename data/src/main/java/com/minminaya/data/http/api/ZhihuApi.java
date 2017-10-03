@@ -25,7 +25,7 @@ public interface ZhihuApi {
      */
     @GET("4/news/before/{path}")
     Observable<BeforeModel> loadBeforeHomeInfo(
-            @Path("path") Integer date
+            @Path("path") String date
     );
 
     @GET("4/news/{id}")

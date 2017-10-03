@@ -10,10 +10,14 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.minminaya.data.http.model.home.BeforeModel;
+import com.minminaya.data.http.model.home.StoriesBean;
 import com.minminaya.library.util.Logger;
 import com.minminaya.nidaily.App;
 import com.minminaya.nidaily.R;
 import com.minminaya.nidaily.content.activity.WebContentActivity;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -24,19 +28,18 @@ import butterknife.ButterKnife;
  */
 
 public class HomeRecyclerViewAdapter extends RecyclerView.Adapter<HomeRecyclerViewAdapter.ViewHolderA> {
-    private BeforeModel beforeModel;
+    private List<StoriesBean> storiesBeanList;
+
+    public List<StoriesBean> getStoriesBeanList() {
+        return storiesBeanList;
+    }
+
+    public void setStoriesBeanList(List<StoriesBean> storiesBeanList) {
+        this.storiesBeanList = storiesBeanList;
+    }
 
     public HomeRecyclerViewAdapter() {
         Logger.d("HomeRecyclerViewAdapter", "HomeRecyclerViewAdapter构造");
-    }
-
-    public BeforeModel getBeforeModel() {
-        return beforeModel;
-    }
-
-    public void setBeforeModel(BeforeModel beforeModel) {
-        this.beforeModel = beforeModel;
-        Logger.d("HomeRecyclerViewAdapter", "beforeModel:" + beforeModel.getDate());
     }
 
     @Override
@@ -48,13 +51,13 @@ public class HomeRecyclerViewAdapter extends RecyclerView.Adapter<HomeRecyclerVi
 
     @Override
     public void onBindViewHolder(ViewHolderA holder, final int position) {
-        if(beforeModel != null){
-            holder.tvHomeRecyclerViewItem.setText(beforeModel.getStories().get(position).getTitle());
-            Glide.with(App.getINSTANCE()).load(beforeModel.getStories().get(position).getImages().get(0)).into(holder.imgHomeRecyclerViewItem);
+        if (storiesBeanList != null) {
+            holder.tvHomeRecyclerViewItem.setText(storiesBeanList.get(position).getTitle());
+            Glide.with(App.getINSTANCE()).load(storiesBeanList.get(position).getImages().get(0)).into(holder.imgHomeRecyclerViewItem);
             holder.cardView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    WebContentActivity.lanuch(App.getINSTANCE(), beforeModel.getStories().get(position).getId());
+                    WebContentActivity.lanuch(App.getINSTANCE(), storiesBeanList.get(position).getId());
                 }
             });
         }
@@ -62,7 +65,7 @@ public class HomeRecyclerViewAdapter extends RecyclerView.Adapter<HomeRecyclerVi
 
     @Override
     public int getItemCount() {
-        return (beforeModel != null) ? beforeModel.getStories().size() : 0;
+        return (storiesBeanList != null) ? storiesBeanList.size() : 0;
     }
 
     class ViewHolderA extends RecyclerView.ViewHolder {

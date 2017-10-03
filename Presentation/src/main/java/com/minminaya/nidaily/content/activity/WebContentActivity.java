@@ -71,6 +71,7 @@ public class WebContentActivity extends BaseActivity {
         Intent intent = getIntent();
         if (intent != null) {
             id = intent.getIntExtra(C.ActivityLoadString.LOAD_CONTENT_ACTIVITY, -1);
+
             contentModel = (ContentModel) ZhihuContentManager.getInstance().getContentFromId(id);
             if (contentModel != null) {
                 setViewData(contentModel);
@@ -92,6 +93,7 @@ public class WebContentActivity extends BaseActivity {
 
     @Override
     public void unBind() {
+        //移除当前EventBus
         EventBus.getDefault().unregister(this);
     }
 

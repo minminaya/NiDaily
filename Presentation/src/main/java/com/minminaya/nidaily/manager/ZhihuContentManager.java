@@ -24,16 +24,16 @@ public class ZhihuContentManager {
         return mZhihuContentManager;
     }
 
-    public Object getData() {
+    public Object getData(String date) {
         //首先读取缓存中的数据
-        Object object = CacheAtFileManage.getObjectAtFile(C.CacheFileString.homeCacheFileName);
+        Object object = CacheAtFileManage.getObjectAtFile(C.CacheFileString.HOME_CACHE_FILE_NAME_DATE_IS + date);
         //如果不为空，则使用，为空，则重新访问网络下载到缓存
         if (object != null) {
             Logger.e("ZhihuContentManager", "object不为空");
             return object;
         } else {
 
-            HttpManager.getInstance().connectRestAPI();
+            HttpManager.getInstance().connectRestAPI(date);
         }
         return null;
     }

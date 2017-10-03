@@ -48,12 +48,12 @@
                         android:layout_gravity="bottom"
                         android:layout_marginBottom="15dp"
                         android:padding="16sp"
-                        android:text="大误 · 来吧，试试活下来"
+                        android:text=""
                         android:textColor="@android:color/white"
                         android:textSize="22sp" />
 
                     <TextView
-                        android:text="Yestone.com 版权图片库"
+                        android:text=""
                         android:id="@+id/tv_image_source_at_web_content_activity"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"

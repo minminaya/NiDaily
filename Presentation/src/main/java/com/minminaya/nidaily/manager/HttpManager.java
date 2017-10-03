@@ -1,14 +1,12 @@
 package com.minminaya.nidaily.manager;
 
-import com.bumptech.glide.Glide;
+
 import com.minminaya.data.cache.CacheAtFileManage;
 import com.minminaya.data.http.NetWorkForRestApi;
 import com.minminaya.data.http.model.content.ContentModel;
 import com.minminaya.data.http.model.home.BeforeModel;
 import com.minminaya.library.util.Logger;
 import com.minminaya.nidaily.C;
-import com.minminaya.nidaily.content.activity.WebContentActivity;
-import com.minminaya.nidaily.util.HtmlUtil;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -32,14 +30,16 @@ public class HttpManager {
     }
 
     private int contentId;
+    private String date;
+
 
     /**
      * 连接网络获取相应数据
      */
-    public void connectRestAPI() {
-
+    public void connectRestAPI(String date) {
+        this.date = date;
         NetWorkForRestApi.getZhihuApi()
-                .loadBeforeHomeInfo(20171002)
+                .loadBeforeHomeInfo(date)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(beforeModelObserver);
@@ -99,7 +99,7 @@ public class HttpManager {
         @Override
         public void onNext(BeforeModel value) {
             //缓存数据
-            boolean isWrited = CacheAtFileManage.putObjectAtFile(value, C.CacheFileString.homeCacheFileName);
+            boolean isWrited = CacheAtFileManage.putObjectAtFile(value, C.CacheFileString.HOME_CACHE_FILE_NAME_DATE_IS + date);
             if (isWrited) {
                 Logger.d("HttpManager", "HttpManager:缓存数据成功");
                 //EvenBus 1事件发送

@@ -36,12 +36,10 @@ dependencies {
     //permissionsdispatcher注解处理器
     //    annotationProcessor 'com.github.bumptech.glide:compiler:4.1.1'
 
-    compile 'com.android.support:appcompat-v7:26.+'
     compile 'com.android.support:design:26.+'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
     compile 'com.android.support:support-v4:26.+'
     testCompile 'junit:junit:4.12'
-    androidTestCompile 'com.google.code.findbugs:jsr305:3.0.1'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.7.0'
     annotationProcessor 'com.github.hotchemi:permissionsdispatcher-processor:2.4.0'
 }

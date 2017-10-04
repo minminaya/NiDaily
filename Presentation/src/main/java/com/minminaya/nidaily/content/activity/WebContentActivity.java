@@ -3,8 +3,10 @@ package com.minminaya.nidaily.content.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.webkit.WebView;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -36,6 +38,8 @@ public class WebContentActivity extends BaseActivity {
     TextView tvDetailTitle;
     @BindView(R.id.tv_image_source_at_web_content_activity)
     TextView tvImageSource;
+    @BindView(R.id.progressBar)
+    ProgressBar progressBar;
 
     private ContentModel contentModel;
     /**
@@ -63,6 +67,8 @@ public class WebContentActivity extends BaseActivity {
 
     @Override
     public void initView(Bundle savedInstanceState) {
+
+        progressBar.setVisibility(View.VISIBLE);
 
         if (!EventBus.getDefault().isRegistered(this)) {
             EventBus.getDefault().register(this);
@@ -122,7 +128,9 @@ public class WebContentActivity extends BaseActivity {
         String htmlData = HtmlUtil.createHtmlData(contentModel);
         webViewWebContent.loadData(htmlData, HtmlUtil.MIME_TYPE, HtmlUtil.ENCODING);
 
-        Glide.with(WebContentActivity.this).load(contentModel.getImage()).into(img);
+        progressBar.setVisibility(View.GONE);
+
+        Glide.with(WebContentActivity.this).load(contentModel.getImage()).error(R.mipmap.ic_error).into(img);
 
         tvDetailTitle.setText(contentModel.getTitle());
 

@@ -170,6 +170,7 @@ public class HomeFragment extends BaseFragment implements MvpView {
      */
     private void notifyRecyvlerViewAdapter() {
         if (isRefresh) {
+            //如果本次刷新数据来自下拉，那么把数据添加到头部
             storiesBeanList.addAll(0, beforeModel.getStories());
             isRefresh = false;
         } else {

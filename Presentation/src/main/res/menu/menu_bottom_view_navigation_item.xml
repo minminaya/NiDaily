@@ -2,14 +2,14 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/home"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/ic_home_black_48dp"
         android:title="@string/home" />
     <item
         android:id="@+id/topic"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/ic_whatshot_black_48dp"
         android:title="@string/topic" />
     <item
         android:id="@+id/column"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/ic_view_column_black_48dp"
         android:title="@string/column" />
 </menu>

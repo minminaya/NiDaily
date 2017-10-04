@@ -17,11 +17,9 @@ import com.blankj.utilcode.util.FragmentUtils;
 import com.minminaya.library.util.Logger;
 import com.minminaya.nidaily.base.BaseActivity;
 import com.minminaya.nidaily.home.fragment.HomeFragment;
-import com.minminaya.nidaily.home.presenter.HomeFragmentPresenter;
 import com.minminaya.nidaily.mvp.view.MvpView;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 
 public class OuterActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener, MvpView {
@@ -34,11 +32,11 @@ public class OuterActivity extends BaseActivity
     DrawerLayout drawer;
     @BindView(R.id.frame_layout_content)
     FrameLayout frameLayoutContent;
+
     @BindView(R.id.bottom_navigation)
     BottomNavigationView bottomNavigation;
 
     FragmentManager mFragmentManager = getSupportFragmentManager();
-
 
 
     @Override
@@ -49,6 +47,7 @@ public class OuterActivity extends BaseActivity
     @Override
     public void initView(Bundle savedInstanceState) {
         setSupportActionBar(toolbar);
+
         //添加Fragment
         FragmentUtils.addFragment(mFragmentManager, HomeFragment.getInstance(), R.id.frame_layout_content, true);
 
@@ -60,7 +59,6 @@ public class OuterActivity extends BaseActivity
         bottomNavigation.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-
                 switch (item.getItemId()) {
                     case R.id.home:
                         FragmentUtils.showFragment(HomeFragment.getInstance());
@@ -89,6 +87,8 @@ public class OuterActivity extends BaseActivity
         drawer.setDrawerListener(toggle);
         toggle.syncState();
         navigationView.setNavigationItemSelectedListener(this);
+
+
     }
 
     @Override

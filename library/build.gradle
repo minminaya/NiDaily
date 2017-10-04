@@ -73,5 +73,7 @@ dependencies {
 
     //Eventbus
     compile 'org.greenrobot:eventbus:3.0.0'
+
+    compile 'com.aurelhubert:ahbottomnavigation:2.1.0'
 }
 

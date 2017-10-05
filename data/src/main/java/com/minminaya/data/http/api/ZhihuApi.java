@@ -2,6 +2,8 @@ package com.minminaya.data.http.api;
 
 import com.minminaya.data.http.model.content.ContentModel;
 import com.minminaya.data.http.model.home.BeforeModel;
+import com.minminaya.data.http.model.topic.ThemeItemModel;
+import com.minminaya.data.http.model.topic.TopicItemModel;
 
 import io.reactivex.Observable;
 import retrofit2.http.GET;
@@ -31,6 +33,20 @@ public interface ZhihuApi {
     @GET("4/news/{id}")
     Observable<ContentModel> loadContent(
             @Path("id") Integer id
+    );
+
+    /**
+     * 获取topic页的item
+     */
+    @GET("4/themes")
+    Observable<TopicItemModel> loadTopicItem();
+
+    /**
+     * 获取topic页的item
+     */
+    @GET("4/theme/{path}")
+    Observable<ThemeItemModel> loadThemeItem(
+            @Path("path") Integer id
     );
 
 }

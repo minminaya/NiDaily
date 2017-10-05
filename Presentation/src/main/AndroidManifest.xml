@@ -5,6 +5,7 @@
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:name=".App"
         android:allowBackup="true"
@@ -26,6 +27,9 @@
         <activity
             android:name=".content.activity.WebContentActivity"
             android:theme="@style/AppTheme.NoActionBar.FullScreen" />
+        <activity
+            android:name=".topic.activity.ThemeItemActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
     </application>
 
 </manifest>

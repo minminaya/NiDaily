@@ -117,6 +117,12 @@ public class DataUtils {
             e.printStackTrace();
             return object;
         }
+        try {
+            fileInputStream.close();
+            objectInputStream.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         return object;
 

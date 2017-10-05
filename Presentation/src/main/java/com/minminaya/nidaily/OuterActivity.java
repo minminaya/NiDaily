@@ -17,7 +17,9 @@ import com.blankj.utilcode.util.FragmentUtils;
 import com.minminaya.library.util.Logger;
 import com.minminaya.nidaily.base.BaseActivity;
 import com.minminaya.nidaily.home.fragment.HomeFragment;
+import com.minminaya.nidaily.manager.HttpManager;
 import com.minminaya.nidaily.mvp.view.MvpView;
+import com.minminaya.nidaily.topic.fragment.TopicFragment;
 
 import butterknife.BindView;
 
@@ -50,6 +52,9 @@ public class OuterActivity extends BaseActivity
 
         //添加Fragment
         FragmentUtils.addFragment(mFragmentManager, HomeFragment.getInstance(), R.id.frame_layout_content, true);
+        FragmentUtils.addFragment(mFragmentManager, TopicFragment.getInstance(), R.id.frame_layout_content, true);
+
+//        FragmentUtils.showFragment(TopicFragment.getInstance());
 
         FragmentUtils.showFragment(HomeFragment.getInstance());
     }
@@ -61,11 +66,13 @@ public class OuterActivity extends BaseActivity
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.home:
+                        FragmentUtils.hideFragment(TopicFragment.getInstance());
                         FragmentUtils.showFragment(HomeFragment.getInstance());
                         Logger.e("OuterActivity", "home");
                         break;
                     case R.id.topic:
                         FragmentUtils.hideFragment(HomeFragment.getInstance());
+                        FragmentUtils.showFragment(TopicFragment.getInstance());
                         Logger.e("OuterActivity", "topic");
                         break;
                     case R.id.column:

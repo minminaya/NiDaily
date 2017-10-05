@@ -5,6 +5,8 @@ import com.minminaya.data.cache.CacheAtFileManage;
 import com.minminaya.data.http.NetWorkForRestApi;
 import com.minminaya.data.http.model.content.ContentModel;
 import com.minminaya.data.http.model.home.BeforeModel;
+import com.minminaya.data.http.model.topic.ThemeItemModel;
+import com.minminaya.data.http.model.topic.TopicItemModel;
 import com.minminaya.library.util.Logger;
 import com.minminaya.nidaily.C;
 
@@ -31,7 +33,7 @@ public class HttpManager {
 
     private int contentId;
     private String date;
-
+    private int themeId;
 
     /**
      * 连接网络获取相应数据
@@ -45,7 +47,9 @@ public class HttpManager {
                 .subscribe(beforeModelObserver);
     }
 
-
+    /**
+     * 获取相应id的详细内容
+     */
     public void loadContentDataFromId(Integer contentId1) {
 
         this.contentId = contentId1;
@@ -57,6 +61,96 @@ public class HttpManager {
                 .subscribeOn(Schedulers.io())
                 .subscribe(contentObserver);
     }
+
+    /**
+     * 获取相应Topic页Item
+     */
+    public void loadTopicItemModel() {
+
+
+        //加载数据
+        NetWorkForRestApi.getZhihuApi()
+                .loadTopicItem()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(topicItemObserver);
+    }
+
+    /**
+     * 根据指定的id获取相应Theme页Item
+     *
+     * @param id 主题日报的id
+     */
+    public void loadThemeItemModel(Integer id, String date) {
+        this.date = date;
+        this.themeId = id;
+        //加载数据
+        NetWorkForRestApi.getZhihuApi()
+                .loadThemeItem(id)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(themeItemObserver);
+    }
+
+    Observer<ThemeItemModel> themeItemObserver = new Observer<ThemeItemModel>() {
+        @Override
+        public void onSubscribe(Disposable d) {
+
+        }
+
+        @Override
+        public void onNext(ThemeItemModel value) {
+            Logger.e("HttpManager", "ThemeItemModel：" + value.getDescription());
+            //缓存数据
+            boolean isWrited = CacheAtFileManage.putObjectAtFile(value, C.CacheFileString.THEME_CACHE_ITEM + date + themeId);
+            if (isWrited) {
+                Logger.d("HttpManager", "HttpManager themeItemObserver:缓存数据成功");
+                //EvenBus 1事件发送
+                EventBus.getDefault().post(C.EventBusString.THEME_CACHE_ITEM_DOWNLOAD_SUCCESSFUL);
+            }
+        }
+
+        @Override
+        public void onError(Throwable e) {
+
+        }
+
+        @Override
+        public void onComplete() {
+
+        }
+    };
+
+
+    Observer<TopicItemModel> topicItemObserver = new Observer<TopicItemModel>() {
+        @Override
+        public void onSubscribe(Disposable d) {
+
+        }
+
+        @Override
+        public void onNext(TopicItemModel value) {
+            Logger.e("HttpManager", "TopicItem：" + value.getOthers().get(0).getName());
+            //缓存数据
+            boolean isWrited = CacheAtFileManage.putObjectAtFile(value, C.CacheFileString.TOPIC_CACHE_ITEM);
+            if (isWrited) {
+                Logger.d("HttpManager", "HttpManager:缓存数据成功");
+                //EvenBus 1事件发送
+                EventBus.getDefault().post(C.EventBusString.TOPIC_CACHE_ITEM_DOWNLOAD_SUCCESSFUL);
+            }
+        }
+
+        @Override
+        public void onError(Throwable e) {
+            e.printStackTrace();
+        }
+
+        @Override
+        public void onComplete() {
+
+        }
+    };
+
 
     Observer<ContentModel> contentObserver = new Observer<ContentModel>() {
         @Override

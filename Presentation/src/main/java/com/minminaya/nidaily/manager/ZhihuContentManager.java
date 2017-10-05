@@ -52,4 +52,36 @@ public class ZhihuContentManager {
         }
     }
 
+    /**
+     * 加载Topic页item
+     */
+    public Object getTopicData() {
+        //首先读取缓存中的数据
+        Object object = CacheAtFileManage.getObjectAtFile(C.CacheFileString.TOPIC_CACHE_ITEM);
+        //如果不为空，则使用，为空，则重新访问网络下载到缓存
+        if (object != null) {
+            Logger.e("ZhihuContentManager", "getTopicData object不为空");
+            return object;
+        } else {
+            HttpManager.getInstance().loadTopicItemModel();
+        }
+        return null;
+    }
+
+    /**
+     * 加载Topic页item
+     */
+    public Object getThemeData(Integer id, String date) {
+        //首先读取缓存中的数据
+        Object object = CacheAtFileManage.getObjectAtFile(C.CacheFileString.THEME_CACHE_ITEM + date+id);
+        //如果不为空，则使用，为空，则重新访问网络下载到缓存
+        if (object != null) {
+            Logger.e("ZhihuContentManager", "getThemeData object不为空");
+            return object;
+        } else {
+            HttpManager.getInstance().loadThemeItemModel(id, date);
+        }
+        return null;
+    }
+
 }

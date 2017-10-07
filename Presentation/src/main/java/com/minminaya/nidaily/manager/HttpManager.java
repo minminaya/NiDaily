@@ -3,6 +3,8 @@ package com.minminaya.nidaily.manager;
 
 import com.minminaya.data.cache.CacheAtFileManage;
 import com.minminaya.data.http.NetWorkForRestApi;
+import com.minminaya.data.http.model.column.SectionItemModel;
+import com.minminaya.data.http.model.column.SectionsModel;
 import com.minminaya.data.http.model.content.ContentModel;
 import com.minminaya.data.http.model.home.BeforeModel;
 import com.minminaya.data.http.model.topic.ThemeItemModel;
@@ -32,8 +34,12 @@ public class HttpManager {
     }
 
     private int contentId;
+
     private String date;
     private int themeId;
+
+    private String sectionDate;
+    private int sectionId;
 
     /**
      * 连接网络获取相应数据
@@ -92,6 +98,91 @@ public class HttpManager {
                 .subscribe(themeItemObserver);
     }
 
+    /**
+     * 根据指定的id获取相应Theme页Item
+     *
+     * @param id 主题日报的id
+     */
+    public void loadSectionItemModel(Integer id, String sectionDate) {
+        this.sectionDate = sectionDate;
+        this.sectionId = id;
+        //加载数据
+        NetWorkForRestApi.getZhihuApi()
+                .loadSectionItemContentForId(id)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(sectionItemObserver);
+    }
+
+    /**
+     * 获取相应Column页Item
+     */
+    public void loadColumnItemModel() {
+        //加载数据
+        NetWorkForRestApi.getZhihuApi()
+                .loadSectionItem()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(columnItemObserver);
+    }
+
+    Observer<SectionsModel> columnItemObserver = new Observer<SectionsModel>() {
+        @Override
+        public void onSubscribe(Disposable d) {
+
+        }
+
+        @Override
+        public void onNext(SectionsModel value) {
+            Logger.e("HttpManager", "SectionsModel：" + value.getData().get(0).getDescription());
+            //缓存数据
+            boolean isWrited = CacheAtFileManage.putObjectAtFile(value, C.CacheFileString.COLUMN_CACHE_ITEM);
+            if (isWrited) {
+                Logger.d("HttpManager", "HttpManager SectionsModel:缓存数据成功");
+                //EvenBus 1事件发送
+                EventBus.getDefault().post(C.EventBusString.COLUMN_CACHE_ITEM_DOWNLOAD_SUCCESSFUL);
+            }
+        }
+
+        @Override
+        public void onError(Throwable e) {
+            e.printStackTrace();
+        }
+
+        @Override
+        public void onComplete() {
+
+        }
+    };
+    Observer<SectionItemModel> sectionItemObserver = new Observer<SectionItemModel>() {
+        @Override
+        public void onSubscribe(Disposable d) {
+
+        }
+
+        @Override
+        public void onNext(SectionItemModel value) {
+            Logger.e("HttpManager", "SectionItemModel：" + value.getName());
+            //缓存数据
+            boolean isWrited = CacheAtFileManage.putObjectAtFile(value, C.CacheFileString.SECTION_CACHE_ITEM + sectionDate + sectionId);
+            if (isWrited) {
+                Logger.d("HttpManager", "HttpManager sectionItemModel:缓存数据成功");
+                //EvenBus 1事件发送
+                EventBus.getDefault().post(C.EventBusString.SECTION_CACHE_ITEM_DOWNLOAD_SUCCESSFUL);
+            }
+        }
+
+        @Override
+        public void onError(Throwable e) {
+            e.printStackTrace();
+        }
+
+        @Override
+        public void onComplete() {
+
+        }
+    };
+
     Observer<ThemeItemModel> themeItemObserver = new Observer<ThemeItemModel>() {
         @Override
         public void onSubscribe(Disposable d) {
@@ -112,7 +203,7 @@ public class HttpManager {
 
         @Override
         public void onError(Throwable e) {
-
+            e.printStackTrace();
         }
 
         @Override

@@ -73,7 +73,7 @@ public class ZhihuContentManager {
      */
     public Object getThemeData(Integer id, String date) {
         //首先读取缓存中的数据
-        Object object = CacheAtFileManage.getObjectAtFile(C.CacheFileString.THEME_CACHE_ITEM + date+id);
+        Object object = CacheAtFileManage.getObjectAtFile(C.CacheFileString.THEME_CACHE_ITEM + date + id);
         //如果不为空，则使用，为空，则重新访问网络下载到缓存
         if (object != null) {
             Logger.e("ZhihuContentManager", "getThemeData object不为空");
@@ -83,5 +83,39 @@ public class ZhihuContentManager {
         }
         return null;
     }
+
+    /**
+     * 加载Column页item
+     */
+    public Object getColumnData() {
+        //首先读取缓存中的数据
+        Object object = CacheAtFileManage.getObjectAtFile(C.CacheFileString.COLUMN_CACHE_ITEM);
+        //如果不为空，则使用，为空，则重新访问网络下载到缓存
+        if (object != null) {
+            Logger.e("ZhihuContentManager", "getColumnData object不为空");
+            return object;
+        } else {
+            HttpManager.getInstance().loadColumnItemModel();
+        }
+        return null;
+    }
+
+
+    /**
+     * 加载Section页item
+     */
+    public Object getSectionData(Integer id, String date) {
+        //首先读取缓存中的数据
+        Object object = CacheAtFileManage.getObjectAtFile(C.CacheFileString.SECTION_CACHE_ITEM + date + id);
+        //如果不为空，则使用，为空，则重新访问网络下载到缓存
+        if (object != null) {
+            Logger.e("ZhihuContentManager", "getSectionData object不为空");
+            return object;
+        } else {
+            HttpManager.getInstance().loadSectionItemModel(id, date);
+        }
+        return null;
+    }
+
 
 }

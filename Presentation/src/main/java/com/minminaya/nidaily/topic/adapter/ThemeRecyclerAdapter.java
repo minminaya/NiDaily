@@ -53,6 +53,8 @@ public class ThemeRecyclerAdapter extends RecyclerView.Adapter<ThemeRecyclerAdap
         if (themeItemModels != null) {
             final List<StoriesBean> stories = themeItemModels.get(0).getStories();
             if (stories.get(position).getImages() != null) {
+
+                //如果当前是有图片的item，那么使用有图片的layout
                 holder.tvTitleThemeRecyclerViewItemForNoImg.setVisibility(View.GONE);
 
                 holder.imgThemeRecyclerViewItem.setVisibility(View.VISIBLE);

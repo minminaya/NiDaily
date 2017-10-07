@@ -1,4 +1,4 @@
-package com.minminaya.nidaily.topic.adapter;
+package com.minminaya.nidaily.column.adapter;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,11 +13,13 @@ import android.widget.TextView;
 
 import com.blankj.utilcode.util.ActivityUtils;
 import com.bumptech.glide.Glide;
+import com.minminaya.data.http.model.column.SectionsModel;
 import com.minminaya.data.http.model.topic.TopicItemModel;
 import com.minminaya.library.util.Logger;
 import com.minminaya.nidaily.App;
 import com.minminaya.nidaily.C;
 import com.minminaya.nidaily.R;
+import com.minminaya.nidaily.column.activity.SectionItemActivity;
 import com.minminaya.nidaily.topic.activity.ThemeItemActivity;
 
 import java.util.List;
@@ -26,23 +28,23 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
- * TopicFragment页的RecyclerView的Adapter
- * Created by Niwa on 2017/9/30.
+ * ColumnFragment页的RecyclerView的Adapter
+ * Created by Niwa on 2017/10/07.
  */
 
-public class TopicRecyclerViewAdapter extends RecyclerView.Adapter<TopicRecyclerViewAdapter.ViewHolderA> {
-    private List<TopicItemModel> topicItemModels;
+public class ColumnRecyclerViewAdapter extends RecyclerView.Adapter<ColumnRecyclerViewAdapter.ViewHolderA> {
+    private List<SectionsModel> sectionsModels;
 
-    public List<TopicItemModel> getTopicItemModels() {
-        return topicItemModels;
+    public List<SectionsModel> getSectionsModels() {
+        return sectionsModels;
     }
 
-    public void setTopicItemModels(List<TopicItemModel> topicItemModels) {
-        this.topicItemModels = topicItemModels;
+    public void setSectionsModels(List<SectionsModel> sectionsModels) {
+        this.sectionsModels = sectionsModels;
     }
 
-    public TopicRecyclerViewAdapter() {
-        Logger.d("TopicRecyclerViewAdapter", "TopicRecyclerViewAdapter 构造");
+    public ColumnRecyclerViewAdapter() {
+        Logger.d("ColumnRecyclerViewAdapter", "ColumnRecyclerViewAdapter 构造");
     }
 
     @Override
@@ -54,17 +56,17 @@ public class TopicRecyclerViewAdapter extends RecyclerView.Adapter<TopicRecycler
 
     @Override
     public void onBindViewHolder(ViewHolderA holder, final int position) {
-        if (topicItemModels != null) {
-            holder.tvDescriptionRecyclerViewItem.setText(topicItemModels.get(0).getOthers().get(position).getDescription());
-            holder.tvTopicName.setText(topicItemModels.get(0).getOthers().get(position).getName());
-            Glide.with(App.getINSTANCE()).load(topicItemModels.get(0).getOthers().get(position).getThumbnail()).into(holder.imgTopicRecyclerViewItem);
+        if (sectionsModels != null) {
+            holder.tvDescriptionRecyclerViewItem.setText(sectionsModels.get(0).getData().get(position).getName());
+            holder.tvTopicName.setText(sectionsModels.get(0).getData().get(position).getDescription());
+            Glide.with(App.getINSTANCE()).load(sectionsModels.get(0).getData().get(position).getThumbnail()).into(holder.imgTopicRecyclerViewItem);
 
             holder.cardView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(App.getINSTANCE(), ThemeItemActivity.class);
+                    Intent intent = new Intent(App.getINSTANCE(), SectionItemActivity.class);
                     Bundle bundle = new Bundle();
-                    bundle.putInt(C.BundleKeyString.TOPIC_RECYCLER_VIEW_TO_THEME_ACTIVITY, topicItemModels.get(0).getOthers().get(position).getId());
+                    bundle.putInt(C.BundleKeyString.COLUMN_RECYCLER_VIEW_TO_SECTION_ACTIVITY, sectionsModels.get(0).getData().get(position).getId());
                     intent.putExtras(bundle);
                     ActivityUtils.startActivity(intent);
                 }
@@ -74,7 +76,7 @@ public class TopicRecyclerViewAdapter extends RecyclerView.Adapter<TopicRecycler
 
     @Override
     public int getItemCount() {
-        return (topicItemModels != null) ? topicItemModels.get(0).getOthers().size() : 0;
+        return (sectionsModels != null) ? sectionsModels.get(0).getData().size() : 0;
     }
 
     class ViewHolderA extends RecyclerView.ViewHolder {

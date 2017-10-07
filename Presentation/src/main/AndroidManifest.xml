@@ -30,6 +30,9 @@
         <activity
             android:name=".topic.activity.ThemeItemActivity"
             android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".column.activity.SectionItemActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
     </application>
 
 </manifest>

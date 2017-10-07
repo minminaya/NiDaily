@@ -1,5 +1,7 @@
 package com.minminaya.data.http.api;
 
+import com.minminaya.data.http.model.column.SectionItemModel;
+import com.minminaya.data.http.model.column.SectionsModel;
 import com.minminaya.data.http.model.content.ContentModel;
 import com.minminaya.data.http.model.home.BeforeModel;
 import com.minminaya.data.http.model.topic.ThemeItemModel;
@@ -48,5 +50,20 @@ public interface ZhihuApi {
     Observable<ThemeItemModel> loadThemeItem(
             @Path("path") Integer id
     );
+
+    /**
+     * 获取column页的item
+     */
+    @GET("4/sections")
+    Observable<SectionsModel> loadSectionItem();
+
+    /**
+     * 根据id获取Section页的item
+     */
+    @GET("4/section/{id}")
+    Observable<SectionItemModel> loadSectionItemContentForId(
+            @Path("id") Integer sectionId
+    );
+
 
 }

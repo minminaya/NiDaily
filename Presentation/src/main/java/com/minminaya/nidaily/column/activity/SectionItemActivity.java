@@ -68,8 +68,7 @@ public class SectionItemActivity extends BaseActivity {
         recyclerView.setLoadingListener(new XRecyclerView.LoadingListener() {
             @Override
             public void onRefresh() {
-//                themeItemModel = (ThemeItemModel) ZhihuContentManager.getInstance().getThemeData(id, DateUtils.getBeforeDayTime(dateIndex));
-                getEventBusEvent(C.EventBusString.THEME_CACHE_ITEM_DOWNLOAD_SUCCESSFUL);
+                getEventBusEvent(C.EventBusString.SECTION_CACHE_ITEM_DOWNLOAD_SUCCESSFUL);
             }
 
             @Override

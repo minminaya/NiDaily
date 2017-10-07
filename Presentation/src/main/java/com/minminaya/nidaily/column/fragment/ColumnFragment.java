@@ -2,6 +2,7 @@ package com.minminaya.nidaily.column.fragment;
 
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.View;
+import android.widget.ProgressBar;
 
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.minminaya.data.http.model.column.SectionsModel;
@@ -115,7 +116,7 @@ public class ColumnFragment extends BaseFragment implements MvpView {
         switch (eventIndex) {
             case C.EventBusString.COLUMN_CACHE_ITEM_DOWNLOAD_SUCCESSFUL:
 
-                sectionsModel = (SectionsModel) ZhihuContentManager.getInstance().getTopicData();
+                sectionsModel = (SectionsModel) ZhihuContentManager.getInstance().getColumnData();
                 if (sectionsModel != null) {
                     Logger.e("ZhihuContentManager", "getEventBusEvent：" + sectionsModel.getData().get(0).getDescription());
                     notifyRecyvlerViewAdapter();

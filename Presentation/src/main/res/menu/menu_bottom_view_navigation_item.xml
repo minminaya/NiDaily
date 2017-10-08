@@ -5,6 +5,10 @@
         android:icon="@drawable/ic_home_black_48dp"
         android:title="@string/home" />
     <item
+        android:id="@+id/hot"
+        android:icon="@drawable/ic_whatshot_black_48dp"
+        android:title="@string/hot" />
+    <item
         android:id="@+id/topic"
         android:icon="@drawable/ic_whatshot_black_48dp"
         android:title="@string/topic" />

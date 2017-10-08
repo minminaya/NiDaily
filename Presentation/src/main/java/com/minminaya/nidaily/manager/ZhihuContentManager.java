@@ -37,6 +37,19 @@ public class ZhihuContentManager {
         }
         return null;
     }
+    public Object getHotData(String date) {
+        //首先读取缓存中的数据
+        Object object = CacheAtFileManage.getObjectAtFile(C.CacheFileString.HOT_CACHE_FILE_NAME_DATE_IS + date);
+        //如果不为空，则使用，为空，则重新访问网络下载到缓存
+        if (object != null) {
+            Logger.e("ZhihuContentManager", "object不为空");
+            return object;
+        } else {
+
+            HttpManager.getInstance().loadHotModel(date);
+        }
+        return null;
+    }
 
     public Object getContentFromId(Integer contentId) {
         //首先读取缓存中的数据

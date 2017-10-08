@@ -25,16 +25,8 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
-import io.reactivex.Observable;
-import io.reactivex.ObservableEmitter;
-import io.reactivex.ObservableOnSubscribe;
-import io.reactivex.Observer;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.Consumer;
 
 /**
  * 主页的Fragment
@@ -47,6 +39,7 @@ public class HomeFragment extends BaseFragment implements MvpView {
     HomeRecyclerViewAdapter mHomeRecyclerViewAdapter;
 
     BeforeModel beforeModel = null;
+
     /**
      * 时间的前后标志，用于刷新数据，默认为最新一天
      */
@@ -88,6 +81,8 @@ public class HomeFragment extends BaseFragment implements MvpView {
         recyclerView.setLayoutManager(new LinearLayoutManager(App.getINSTANCE()));
         mHomeRecyclerViewAdapter = new HomeRecyclerViewAdapter();
         recyclerView.setAdapter(mHomeRecyclerViewAdapter);
+
+
 
         //加载最新一天的数据
         Object object = ZhihuContentManager.getInstance().getData(DateUtils.getBeforeDayTime(dateIndex));
@@ -176,6 +171,8 @@ public class HomeFragment extends BaseFragment implements MvpView {
         } else {
             storiesBeanList.addAll(beforeModel.getStories());
         }
+
+
         mHomeRecyclerViewAdapter.setStoriesBeanList(storiesBeanList);
         mHomeRecyclerViewAdapter.notifyDataSetChanged();
         recyclerView.refreshComplete();

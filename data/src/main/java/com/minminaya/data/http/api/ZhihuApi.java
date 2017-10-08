@@ -4,6 +4,7 @@ import com.minminaya.data.http.model.column.SectionItemModel;
 import com.minminaya.data.http.model.column.SectionsModel;
 import com.minminaya.data.http.model.content.ContentModel;
 import com.minminaya.data.http.model.home.BeforeModel;
+import com.minminaya.data.http.model.hot.HotModel;
 import com.minminaya.data.http.model.topic.ThemeItemModel;
 import com.minminaya.data.http.model.topic.TopicItemModel;
 
@@ -64,6 +65,12 @@ public interface ZhihuApi {
     Observable<SectionItemModel> loadSectionItemContentForId(
             @Path("id") Integer sectionId
     );
+
+    /**
+     * 获取Hot页的item
+     */
+    @GET("3/news/hot")
+    Observable<HotModel> loadHotModel();
 
 
 }

@@ -7,6 +7,7 @@ import com.minminaya.data.http.model.column.SectionItemModel;
 import com.minminaya.data.http.model.column.SectionsModel;
 import com.minminaya.data.http.model.content.ContentModel;
 import com.minminaya.data.http.model.home.BeforeModel;
+import com.minminaya.data.http.model.hot.HotModel;
 import com.minminaya.data.http.model.topic.ThemeItemModel;
 import com.minminaya.data.http.model.topic.TopicItemModel;
 import com.minminaya.library.util.Logger;
@@ -28,6 +29,7 @@ import io.reactivex.schedulers.Schedulers;
 
 public class HttpManager {
     private static final HttpManager httpManager = new HttpManager();
+    private String hotModelDate;
 
     public static HttpManager getInstance() {
         return httpManager;
@@ -52,6 +54,46 @@ public class HttpManager {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(beforeModelObserver);
     }
+    /**
+     * 连接网络获取相应数据
+     */
+    public void loadHotModel(String date) {
+        this.hotModelDate = date;
+        NetWorkForRestApi.getZhihuApi()
+                .loadHotModel()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(hotModelObserver);
+    }
+
+
+    Observer<HotModel> hotModelObserver = new Observer<HotModel>() {
+        @Override
+        public void onSubscribe(Disposable d) {
+
+        }
+
+        @Override
+        public void onNext(HotModel value) {
+            //缓存数据
+            boolean isWrited = CacheAtFileManage.putObjectAtFile(value, C.CacheFileString.HOT_CACHE_FILE_NAME_DATE_IS + hotModelDate);
+            if (isWrited) {
+                Logger.d("HttpManager", "HttpManager:缓存数据成功");
+                //EvenBus 1事件发送
+                EventBus.getDefault().post(C.EventBusString.HOT_CACHE_ITEM_DOWNLOAD_SUCCESSFUL);
+            }
+        }
+
+        @Override
+        public void onError(Throwable e) {
+            e.printStackTrace();
+        }
+
+        @Override
+        public void onComplete() {
+
+        }
+    };
 
     /**
      * 获取相应id的详细内容

@@ -9,7 +9,6 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.FrameLayout;
 
@@ -18,10 +17,10 @@ import com.minminaya.library.util.Logger;
 import com.minminaya.nidaily.base.BaseActivity;
 import com.minminaya.nidaily.column.fragment.ColumnFragment;
 import com.minminaya.nidaily.home.fragment.HomeFragment;
-import com.minminaya.nidaily.manager.HttpManager;
-import com.minminaya.nidaily.manager.ZhihuContentManager;
+import com.minminaya.nidaily.hot.fragment.HotFragment;
 import com.minminaya.nidaily.mvp.view.MvpView;
 import com.minminaya.nidaily.topic.fragment.TopicFragment;
+import com.minminaya.nidaily.util.BottomNavigationViewHelper;
 
 import butterknife.BindView;
 
@@ -53,10 +52,10 @@ public class OuterActivity extends BaseActivity
         setSupportActionBar(toolbar);
 
         //添加Fragment
-        FragmentUtils.addFragment(mFragmentManager, HomeFragment.getInstance(), R.id.frame_layout_content, false);
-        FragmentUtils.addFragment(mFragmentManager, TopicFragment.getInstance(), R.id.frame_layout_content, true);
-        FragmentUtils.addFragment(mFragmentManager, ColumnFragment.getInstance(), R.id.frame_layout_content, true);
-
+//        FragmentUtils.addFragment(mFragmentManager, HomeFragment.getInstance(), R.id.frame_layout_content, false);
+//        FragmentUtils.addFragment(mFragmentManager, TopicFragment.getInstance(), R.id.frame_layout_content, true);
+//        FragmentUtils.addFragment(mFragmentManager, ColumnFragment.getInstance(), R.id.frame_layout_content, true);
+        FragmentUtils.addFragment(mFragmentManager, HotFragment.getInstance(), R.id.frame_layout_content, false);
     }
 
     @Override
@@ -66,6 +65,12 @@ public class OuterActivity extends BaseActivity
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.home:
+                        FragmentUtils.hideFragment(TopicFragment.getInstance());
+                        FragmentUtils.hideFragment(ColumnFragment.getInstance());
+                        FragmentUtils.showFragment(HomeFragment.getInstance());
+                        Logger.e("OuterActivity", "home");
+                        break;
+                    case R.id.hot:
                         FragmentUtils.hideFragment(TopicFragment.getInstance());
                         FragmentUtils.hideFragment(ColumnFragment.getInstance());
                         FragmentUtils.showFragment(HomeFragment.getInstance());
@@ -91,7 +96,7 @@ public class OuterActivity extends BaseActivity
 
     @Override
     public void bind() {
-
+        BottomNavigationViewHelper.disableShiftMode(bottomNavigation);
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -115,28 +120,6 @@ public class OuterActivity extends BaseActivity
         } else {
             super.onBackPressed();
         }
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.outer, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
     }
 
     @SuppressWarnings("StatementWithEmptyBody")

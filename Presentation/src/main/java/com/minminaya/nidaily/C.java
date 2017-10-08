@@ -12,7 +12,8 @@ public class C {
 
 
     public static class CacheFileString {
-        public static final String HOME_CACHE_FILE_NAME_DATE_IS = "homeCacheFileName_Date_is_";
+        public static final String HOME_CACHE_FILE_NAME_DATE_IS = "home_cache_file_name_date_is_";
+        public static final String HOT_CACHE_FILE_NAME_DATE_IS = "hot_cache_file_name_date_is_";
         public static final String CONTENT_CACHE_AND_ID_IS = "content_cache_and_id_is_";
         public static final String TOPIC_CACHE_ITEM = "topic_cache_item";
         public static final String THEME_CACHE_ITEM = "theme_cache_item_is_";
@@ -31,6 +32,7 @@ public class C {
         public static final int THEME_CACHE_ITEM_DOWNLOAD_SUCCESSFUL = 0x66ee4fff;
         public static final int SECTION_CACHE_ITEM_DOWNLOAD_SUCCESSFUL = 0x66aa4fff;
         public static final int COLUMN_CACHE_ITEM_DOWNLOAD_SUCCESSFUL = 0x66fe4fff;
+        public static final int HOT_CACHE_ITEM_DOWNLOAD_SUCCESSFUL = 0x66fe7fff;
     }
 
     public static class BundleKeyString {

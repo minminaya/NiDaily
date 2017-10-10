@@ -18,7 +18,9 @@ import com.minminaya.nidaily.C;
 import com.minminaya.nidaily.R;
 import com.minminaya.nidaily.base.BaseActivity;
 import com.minminaya.nidaily.column.adapter.SectionItemRecyclerAdapter;
+import com.minminaya.nidaily.column.presenter.SectionItemActivityPresenter;
 import com.minminaya.nidaily.manager.ZhihuContentManager;
+import com.minminaya.nidaily.mvp.view.MvpView;
 import com.minminaya.nidaily.topic.adapter.ThemeRecyclerAdapter;
 
 import org.greenrobot.eventbus.EventBus;
@@ -30,7 +32,7 @@ import java.util.List;
 
 import butterknife.BindView;
 
-public class SectionItemActivity extends BaseActivity {
+public class SectionItemActivity extends BaseActivity implements MvpView {
 
     @BindView(R.id.recycler_view_theme_activity)
     XRecyclerView recyclerView;
@@ -43,6 +45,7 @@ public class SectionItemActivity extends BaseActivity {
     private int id;
     private SectionItemRecyclerAdapter sectionItemRecyclerAdapter = null;
     private int dateIndex = 0;
+    private SectionItemActivityPresenter sectionItemActivityPresenter = new SectionItemActivityPresenter();
 
     @Override
     public int getContentView() {
@@ -53,6 +56,8 @@ public class SectionItemActivity extends BaseActivity {
     public void initView(Bundle savedInstanceState) {
 
 
+        sectionItemActivityPresenter.registerEventBus();
+        sectionItemActivityPresenter.attachView(this);
 
         Bundle bundle = getIntent().getExtras();
         id = bundle.getInt(C.BundleKeyString.COLUMN_RECYCLER_VIEW_TO_SECTION_ACTIVITY);
@@ -68,7 +73,7 @@ public class SectionItemActivity extends BaseActivity {
         recyclerView.setLoadingListener(new XRecyclerView.LoadingListener() {
             @Override
             public void onRefresh() {
-                getEventBusEvent(C.EventBusString.SECTION_CACHE_ITEM_DOWNLOAD_SUCCESSFUL);
+                sectionItemActivityPresenter.getEventBusEvent(C.EventBusString.SECTION_CACHE_ITEM_DOWNLOAD_SUCCESSFUL);
             }
 
             @Override
@@ -80,58 +85,73 @@ public class SectionItemActivity extends BaseActivity {
 
     @Override
     public void bind() {
-        if (!EventBus.getDefault().isRegistered(this)) {
-            EventBus.getDefault().register(this);
-        }
-        sectionItemModel = (SectionItemModel) ZhihuContentManager.getInstance().getSectionData(id, DateUtils.getBeforeDayTime(dateIndex));
+        sectionItemActivityPresenter.setId(id);
+        sectionItemActivityPresenter.getEventBusEvent(C.EventBusString.SECTION_CACHE_ITEM_DOWNLOAD_SUCCESSFUL);
 
-        if (sectionItemModel != null) {
-            notifyRecyvlerViewAdapter();
-        }
+//        if (!EventBus.getDefault().isRegistered(this)) {
+//            EventBus.getDefault().register(this);
+//        }
+//        sectionItemModel = (SectionItemModel) ZhihuContentManager.getInstance().getSectionData(id, DateUtils.getBeforeDayTime(dateIndex));
+//
+//        if (sectionItemModel != null) {
+//            notifyRecyvlerViewAdapter();
+//        }
 
 
     }
 
     @Override
     public void unBind() {
-        EventBus.getDefault().unregister(this);
+//        EventBus.getDefault().unregister(this);
+        sectionItemActivityPresenter.unReristerEventBus();
+        sectionItemActivityPresenter.detachView(this);
     }
 
 
-    /**
-     * 接收来自HttpManager端EventBus的通知，然后重新读取本地数据，通知RecyclerView更新数据
-     */
-    @Subscribe(threadMode = ThreadMode.MAIN, priority = 3)
-    public void getEventBusEvent(Integer eventIndex) {
-        switch (eventIndex) {
-            case C.EventBusString.SECTION_CACHE_ITEM_DOWNLOAD_SUCCESSFUL:
-
-                sectionItemModel = (SectionItemModel) ZhihuContentManager.getInstance().getSectionData(id, DateUtils.getBeforeDayTime(dateIndex));
-                if (sectionItemModel != null) {
-                    Logger.e("ZhihuContentManager", "getEventBusEvent：" + sectionItemModel.getName());
-                    notifyRecyvlerViewAdapter();
-                } else {
-                    Logger.e("ZhihuContentManager", "sectionItemModel");
-                }
-                break;
-        }
-    }
+//    /**
+//     * 接收来自HttpManager端EventBus的通知，然后重新读取本地数据，通知RecyclerView更新数据
+//     */
+//    @Subscribe(threadMode = ThreadMode.MAIN, priority = 3)
+//    public void getEventBusEvent(Integer eventIndex) {
+//        switch (eventIndex) {
+//            case C.EventBusString.SECTION_CACHE_ITEM_DOWNLOAD_SUCCESSFUL:
+//
+//                sectionItemModel = (SectionItemModel) ZhihuContentManager.getInstance().getSectionData(id, DateUtils.getBeforeDayTime(dateIndex));
+//                if (sectionItemModel != null) {
+//                    Logger.e("ZhihuContentManager", "getEventBusEvent：" + sectionItemModel.getName());
+//                    notifyRecyvlerViewAdapter();
+//                } else {
+//                    Logger.e("ZhihuContentManager", "sectionItemModel");
+//                }
+//                break;
+//        }
+//    }
 
     /**
      * 将BeforeModel设置到Adapter，并通知更新数据
      */
-    private void notifyRecyvlerViewAdapter() {
+    public void notifyRecyvlerViewAdapter() {
+
+
+        sectionItemModel = sectionItemActivityPresenter.getSectionItemModel();
 
         toolbar.setTitle(sectionItemModel.getName());
         setSupportActionBar(toolbar);
 
         sectionItemModels.clear();
         sectionItemModels.add(sectionItemModel);
+
+//        sectionItemRecyclerAdapter.setSectionItemModels(null);
         sectionItemRecyclerAdapter.setSectionItemModels(sectionItemModels);
 
         sectionItemRecyclerAdapter.notifyDataSetChanged();
 
         //停止刷新动画
         recyclerView.refreshComplete();
+    }
+
+    @Override
+    public void onFailed(Throwable throwable) {
+
     }
 }

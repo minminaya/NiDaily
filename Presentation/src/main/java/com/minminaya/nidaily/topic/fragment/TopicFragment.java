@@ -14,6 +14,7 @@ import com.minminaya.nidaily.base.BaseFragment;
 import com.minminaya.nidaily.manager.ZhihuContentManager;
 import com.minminaya.nidaily.mvp.view.MvpView;
 import com.minminaya.nidaily.topic.adapter.TopicRecyclerViewAdapter;
+import com.minminaya.nidaily.topic.presenter.TopicFragmentPresenter;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -38,6 +39,7 @@ public class TopicFragment extends BaseFragment implements MvpView {
     List<TopicItemModel> topicItemModels = new ArrayList<>();
     TopicItemModel topicItemModel;
 
+    private TopicFragmentPresenter topicFragmentPresenter = new TopicFragmentPresenter();
     public static TopicFragment getInstance() {
         return topicFragment;
     }
@@ -46,32 +48,39 @@ public class TopicFragment extends BaseFragment implements MvpView {
     @Override
     protected void unBind() {
         Logger.e("TopicFragment", "unBind");
+
+        topicFragmentPresenter.unReristerEventBus();
+        topicFragmentPresenter.detachView(this);
+
     }
 
     @Override
     public void iniView(View view) {
         Logger.e("TopicFragment", "iniView");
 
-        //注册EventBus
-        if (!EventBus.getDefault().isRegistered(this)) {
-            EventBus.getDefault().register(this);
-        }
-
+//        //注册EventBus
+//        if (!EventBus.getDefault().isRegistered(this)) {
+//            EventBus.getDefault().register(this);
+//        }
+        topicFragmentPresenter.registerEventBus();
     }
 
     @Override
     public void bind() {
         Logger.e("TopicFragment", "bind");
 
+        topicFragmentPresenter.attachView(this);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(App.getINSTANCE()));
         topicRecyclerViewAdapter = new TopicRecyclerViewAdapter();
         recyclerView.setAdapter(topicRecyclerViewAdapter);
 
-        topicItemModel = (TopicItemModel) ZhihuContentManager.getInstance().getTopicData();
-        if (topicItemModel != null) {
-            notifyRecyvlerViewAdapter();
-        }
+        topicFragmentPresenter.getEventBusEvent(C.EventBusString.TOPIC_CACHE_ITEM_DOWNLOAD_SUCCESSFUL);
+
+//        topicItemModel = (TopicItemModel) ZhihuContentManager.getInstance().getTopicData();
+//        if (topicItemModel != null) {
+//            notifyRecyvlerViewAdapter();
+//        }
 
 
     }
@@ -82,7 +91,7 @@ public class TopicFragment extends BaseFragment implements MvpView {
         recyclerView.setLoadingListener(new XRecyclerView.LoadingListener() {
             @Override
             public void onRefresh() {
-                getEventBusEvent(C.EventBusString.TOPIC_CACHE_ITEM_DOWNLOAD_SUCCESSFUL);
+                topicFragmentPresenter.getEventBusEvent(C.EventBusString.TOPIC_CACHE_ITEM_DOWNLOAD_SUCCESSFUL);
             }
 
             @Override
@@ -106,29 +115,32 @@ public class TopicFragment extends BaseFragment implements MvpView {
 
     }
 
-    /**
-     * 接收来自HttpManager端EventBus的通知，然后重新读取本地数据，通知RecyclerView更新数据
-     */
-    @Subscribe(threadMode = ThreadMode.MAIN, priority = 1)
-    public void getEventBusEvent(Integer eventIndex) {
-        switch (eventIndex) {
-            case C.EventBusString.TOPIC_CACHE_ITEM_DOWNLOAD_SUCCESSFUL:
-
-                topicItemModel = (TopicItemModel) ZhihuContentManager.getInstance().getTopicData();
-                if (topicItemModel != null) {
-                    Logger.e("ZhihuContentManager", "getEventBusEvent：" + topicItemModel.getOthers().size());
-                    notifyRecyvlerViewAdapter();
-                } else {
-                    Logger.e("ZhihuContentManager", "befoModel为空");
-                }
-                break;
-        }
-    }
+//    /**
+//     * 接收来自HttpManager端EventBus的通知，然后重新读取本地数据，通知RecyclerView更新数据
+//     */
+//    @Subscribe(threadMode = ThreadMode.MAIN, priority = 1)
+//    public void getEventBusEvent(Integer eventIndex) {
+//        switch (eventIndex) {
+//            case C.EventBusString.TOPIC_CACHE_ITEM_DOWNLOAD_SUCCESSFUL:
+//
+//                topicItemModel = (TopicItemModel) ZhihuContentManager.getInstance().getTopicData();
+//                if (topicItemModel != null) {
+//                    Logger.e("ZhihuContentManager", "getEventBusEvent：" + topicItemModel.getOthers().size());
+//                    notifyRecyvlerViewAdapter();
+//                } else {
+//                    Logger.e("ZhihuContentManager", "befoModel为空");
+//                }
+//                break;
+//        }
+//    }
 
     /**
      * 将BeforeModel设置到Adapter，并通知更新数据
      */
-    private void notifyRecyvlerViewAdapter() {
+    public void notifyRecyvlerViewAdapter() {
+
+        topicItemModel = topicFragmentPresenter.getTopicItemModel();
+
         topicItemModels.clear();
         topicItemModels.add(topicItemModel);
         topicRecyclerViewAdapter.setTopicItemModels(topicItemModels);

@@ -57,6 +57,7 @@ public class HomeFragment extends BaseFragment implements MvpView {
     @Override
     protected void unBind() {
         Logger.e("HomeFragment", "unBind");
+        homeFragmentPresenter.unReristerEventBus();
         homeFragmentPresenter.detachView(this);
     }
 
@@ -64,10 +65,12 @@ public class HomeFragment extends BaseFragment implements MvpView {
     public void iniView(View view) {
         Logger.e("HomeFragment", "iniView");
 
-        //注册EventBus
-        if (!EventBus.getDefault().isRegistered(this)) {
-            EventBus.getDefault().register(this);
-        }
+
+        homeFragmentPresenter.registerEventBus();
+//        //注册EventBus
+//        if (!EventBus.getDefault().isRegistered(this)) {
+//            EventBus.getDefault().register(this);
+//        }
 
     }
 
@@ -76,21 +79,20 @@ public class HomeFragment extends BaseFragment implements MvpView {
         Logger.e("HomeFragment", "bind");
 
         homeFragmentPresenter.attachView(this);
-        homeFragmentPresenter.textMvp();//测试mvp架构是否正常使用
 
         recyclerView.setLayoutManager(new LinearLayoutManager(App.getINSTANCE()));
         mHomeRecyclerViewAdapter = new HomeRecyclerViewAdapter();
         recyclerView.setAdapter(mHomeRecyclerViewAdapter);
 
+        homeFragmentPresenter.getEventBusEvent(C.EventBusString.FROM_HTTPMANAGER_TO_ZHIHU_CONTENT_MANAGER);
 
+//        //加载最新一天的数据
+//        Object object = ZhihuContentManager.getInstance().getData(DateUtils.getBeforeDayTime(dateIndex));
 
-        //加载最新一天的数据
-        Object object = ZhihuContentManager.getInstance().getData(DateUtils.getBeforeDayTime(dateIndex));
-
-        if (object != null) {
-            beforeModel = (BeforeModel) object;
-            notifyRecyvlerViewAdapter();
-        }
+//        if (object != null) {
+//            beforeModel = (BeforeModel) object;
+//            notifyRecyvlerViewAdapter();
+//        }
     }
 
 
@@ -103,23 +105,18 @@ public class HomeFragment extends BaseFragment implements MvpView {
                 dateIndex = 1;
                 //标记当前状态为刷新状态
                 isRefresh = true;
-                getEventBusEvent(C.EventBusString.FROM_HTTPMANAGER_TO_ZHIHU_CONTENT_MANAGER);
-//                Observable.timer(2000, TimeUnit.MILLISECONDS)
-//                        .observeOn(AndroidSchedulers.mainThread())
-//                        .subscribe(new Consumer<Long>() {
-//                            @Override
-//                            public void accept(Long aLong) throws Exception {
-//                                Log.d("HomeFragment onRefresh", "刷新结束");
-//                                recyclerView.refreshComplete();
-//                            }
-//                        });
+                homeFragmentPresenter.setDateIndex(dateIndex);
+                homeFragmentPresenter.getEventBusEvent(C.EventBusString.FROM_HTTPMANAGER_TO_ZHIHU_CONTENT_MANAGER);
+//                getEventBusEvent(C.EventBusString.FROM_HTTPMANAGER_TO_ZHIHU_CONTENT_MANAGER);
             }
 
             @Override
             public void onLoadMore() {
                 Logger.e("HomeFragment::onLoadMore", "onLoadMore");
                 dateIndex--;
-                getEventBusEvent(C.EventBusString.FROM_HTTPMANAGER_TO_ZHIHU_CONTENT_MANAGER);
+                homeFragmentPresenter.setDateIndex(dateIndex);
+//                getEventBusEvent(C.EventBusString.FROM_HTTPMANAGER_TO_ZHIHU_CONTENT_MANAGER);
+                homeFragmentPresenter.getEventBusEvent(C.EventBusString.FROM_HTTPMANAGER_TO_ZHIHU_CONTENT_MANAGER);
                 Logger.e("HomeFragment::onLoadMore", "dateIndex:" + dateIndex);
             }
         });
@@ -140,30 +137,31 @@ public class HomeFragment extends BaseFragment implements MvpView {
 
     }
 
-    /**
-     * 接收来自HttpManager端EventBus的通知，然后重新读取本地数据，通知RecyclerView更新数据
-     */
-    @Subscribe(threadMode = ThreadMode.MAIN, priority = 1)
-    public void getEventBusEvent(Integer eventIndex) {
-        switch (eventIndex) {
-            case C.EventBusString.FROM_HTTPMANAGER_TO_ZHIHU_CONTENT_MANAGER:
-                Logger.e("ZhihuContentManager", "getEventBusEvent");
-
-                beforeModel = (BeforeModel) ZhihuContentManager.getInstance().getData(DateUtils.getBeforeDayTime(dateIndex));
-                if (beforeModel != null) {
-                    Logger.e("ZhihuContentManager", "getEventBusEvent：" + beforeModel.getDate());
-                    notifyRecyvlerViewAdapter();
-                } else {
-                    Logger.e("ZhihuContentManager", "befoModel为空");
-                }
-                break;
-        }
-    }
+//    /**
+//     * 接收来自HttpManager端EventBus的通知，然后重新读取本地数据，通知RecyclerView更新数据
+//     */
+//    @Subscribe(threadMode = ThreadMode.MAIN, priority = 1)
+//    public void getEventBusEvent(Integer eventIndex) {
+//        switch (eventIndex) {
+//            case C.EventBusString.FROM_HTTPMANAGER_TO_ZHIHU_CONTENT_MANAGER:
+//                Logger.e("ZhihuContentManager", "getEventBusEvent");
+//
+//                beforeModel = (BeforeModel) ZhihuContentManager.getInstance().getData(DateUtils.getBeforeDayTime(dateIndex));
+//                if (beforeModel != null) {
+//                    Logger.e("ZhihuContentManager", "getEventBusEvent：" + beforeModel.getDate());
+//                    notifyRecyvlerViewAdapter();
+//                } else {
+//                    Logger.e("ZhihuContentManager", "befoModel为空");
+//                }
+//                break;
+//        }
+//    }
 
     /**
      * 将BeforeModel设置到Adapter，并通知更新数据
      */
-    private void notifyRecyvlerViewAdapter() {
+    public void notifyRecyvlerViewAdapter() {
+        beforeModel = homeFragmentPresenter.getBeforeModel();
         if (isRefresh) {
             //如果本次刷新数据来自下拉，那么把数据添加到头部
             storiesBeanList.addAll(0, beforeModel.getStories());
@@ -177,6 +175,5 @@ public class HomeFragment extends BaseFragment implements MvpView {
         mHomeRecyclerViewAdapter.notifyDataSetChanged();
         recyclerView.refreshComplete();
     }
-
 
 }

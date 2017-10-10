@@ -52,10 +52,12 @@ public class OuterActivity extends BaseActivity
         setSupportActionBar(toolbar);
 
         //添加Fragment
-//        FragmentUtils.addFragment(mFragmentManager, HomeFragment.getInstance(), R.id.frame_layout_content, false);
-//        FragmentUtils.addFragment(mFragmentManager, TopicFragment.getInstance(), R.id.frame_layout_content, true);
-//        FragmentUtils.addFragment(mFragmentManager, ColumnFragment.getInstance(), R.id.frame_layout_content, true);
-        FragmentUtils.addFragment(mFragmentManager, HotFragment.getInstance(), R.id.frame_layout_content, false);
+        FragmentUtils.addFragment(mFragmentManager, HomeFragment.getInstance(), R.id.frame_layout_content, false);
+        FragmentUtils.addFragment(mFragmentManager, HotFragment.getInstance(), R.id.frame_layout_content, true);
+        FragmentUtils.addFragment(mFragmentManager, TopicFragment.getInstance(), R.id.frame_layout_content, true);
+        FragmentUtils.addFragment(mFragmentManager, ColumnFragment.getInstance(), R.id.frame_layout_content, true);
+
+        setTitle("首页");
     }
 
     @Override
@@ -65,27 +67,42 @@ public class OuterActivity extends BaseActivity
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.home:
+                        FragmentUtils.showFragment(HomeFragment.getInstance());
+                        FragmentUtils.hideFragment(HotFragment.getInstance());
                         FragmentUtils.hideFragment(TopicFragment.getInstance());
                         FragmentUtils.hideFragment(ColumnFragment.getInstance());
-                        FragmentUtils.showFragment(HomeFragment.getInstance());
+
+                        setTitle("首页");
                         Logger.e("OuterActivity", "home");
                         break;
                     case R.id.hot:
+                        FragmentUtils.hideFragment(HomeFragment.getInstance());
+                        FragmentUtils.showFragment(HotFragment.getInstance());
                         FragmentUtils.hideFragment(TopicFragment.getInstance());
                         FragmentUtils.hideFragment(ColumnFragment.getInstance());
-                        FragmentUtils.showFragment(HomeFragment.getInstance());
-                        Logger.e("OuterActivity", "home");
+
+                        setTitle("热门");
+
+                        Logger.e("OuterActivity", "hot");
                         break;
                     case R.id.topic:
-                        FragmentUtils.hideFragment(ColumnFragment.getInstance());
                         FragmentUtils.hideFragment(HomeFragment.getInstance());
+                        FragmentUtils.hideFragment(HotFragment.getInstance());
                         FragmentUtils.showFragment(TopicFragment.getInstance());
+                        FragmentUtils.hideFragment(ColumnFragment.getInstance());
+
+                        setTitle("主题");
+
                         Logger.e("OuterActivity", "topic");
                         break;
                     case R.id.column:
-                        FragmentUtils.hideFragment(TopicFragment.getInstance());
                         FragmentUtils.hideFragment(HomeFragment.getInstance());
+                        FragmentUtils.hideFragment(HotFragment.getInstance());
+                        FragmentUtils.hideFragment(TopicFragment.getInstance());
                         FragmentUtils.showFragment(ColumnFragment.getInstance());
+
+                        setTitle("栏目");
+
                         Logger.e("OuterActivity", "column");
                         break;
                 }

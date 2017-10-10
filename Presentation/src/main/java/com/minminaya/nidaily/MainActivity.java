@@ -24,7 +24,7 @@ import com.minminaya.nidaily.util.BottomNavigationViewHelper;
 
 import butterknife.BindView;
 
-public class OuterActivity extends BaseActivity
+public class MainActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener, MvpView {
 
     @BindView(R.id.toolbar)

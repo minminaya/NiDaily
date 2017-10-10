@@ -3,35 +3,24 @@ package com.minminaya.nidaily.column.activity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.widget.ImageView;
-import android.widget.TextView;
-
-import com.bumptech.glide.Glide;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.minminaya.data.http.model.column.SectionItemModel;
-import com.minminaya.data.http.model.topic.ThemeItemModel;
-import com.minminaya.library.util.DateUtils;
-import com.minminaya.library.util.Logger;
 import com.minminaya.nidaily.C;
 import com.minminaya.nidaily.R;
 import com.minminaya.nidaily.base.BaseActivity;
 import com.minminaya.nidaily.column.adapter.SectionItemRecyclerAdapter;
 import com.minminaya.nidaily.column.presenter.SectionItemActivityPresenter;
-import com.minminaya.nidaily.manager.ZhihuContentManager;
 import com.minminaya.nidaily.mvp.view.MvpView;
-import com.minminaya.nidaily.topic.adapter.ThemeRecyclerAdapter;
-
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 
+/**
+ * SectionItemActivity
+ * For Niwa at 2017/10/10
+ */
 public class SectionItemActivity extends BaseActivity implements MvpView {
 
     @BindView(R.id.recycler_view_theme_activity)
@@ -39,12 +28,10 @@ public class SectionItemActivity extends BaseActivity implements MvpView {
     @BindView(R.id.toolbar)
     Toolbar toolbar;
 
-
     private List<SectionItemModel> sectionItemModels = new ArrayList<>();
     private SectionItemModel sectionItemModel = null;
     private int id;
     private SectionItemRecyclerAdapter sectionItemRecyclerAdapter = null;
-    private int dateIndex = 0;
     private SectionItemActivityPresenter sectionItemActivityPresenter = new SectionItemActivityPresenter();
 
     @Override
@@ -54,8 +41,6 @@ public class SectionItemActivity extends BaseActivity implements MvpView {
 
     @Override
     public void initView(Bundle savedInstanceState) {
-
-
         sectionItemActivityPresenter.registerEventBus();
         sectionItemActivityPresenter.attachView(this);
 
@@ -88,51 +73,21 @@ public class SectionItemActivity extends BaseActivity implements MvpView {
         sectionItemActivityPresenter.setId(id);
         sectionItemActivityPresenter.getEventBusEvent(C.EventBusString.SECTION_CACHE_ITEM_DOWNLOAD_SUCCESSFUL);
 
-//        if (!EventBus.getDefault().isRegistered(this)) {
-//            EventBus.getDefault().register(this);
-//        }
-//        sectionItemModel = (SectionItemModel) ZhihuContentManager.getInstance().getSectionData(id, DateUtils.getBeforeDayTime(dateIndex));
-//
-//        if (sectionItemModel != null) {
-//            notifyRecyvlerViewAdapter();
-//        }
-
 
     }
 
     @Override
     public void unBind() {
-//        EventBus.getDefault().unregister(this);
         sectionItemActivityPresenter.unReristerEventBus();
         sectionItemActivityPresenter.detachView(this);
     }
 
 
-//    /**
-//     * 接收来自HttpManager端EventBus的通知，然后重新读取本地数据，通知RecyclerView更新数据
-//     */
-//    @Subscribe(threadMode = ThreadMode.MAIN, priority = 3)
-//    public void getEventBusEvent(Integer eventIndex) {
-//        switch (eventIndex) {
-//            case C.EventBusString.SECTION_CACHE_ITEM_DOWNLOAD_SUCCESSFUL:
-//
-//                sectionItemModel = (SectionItemModel) ZhihuContentManager.getInstance().getSectionData(id, DateUtils.getBeforeDayTime(dateIndex));
-//                if (sectionItemModel != null) {
-//                    Logger.e("ZhihuContentManager", "getEventBusEvent：" + sectionItemModel.getName());
-//                    notifyRecyvlerViewAdapter();
-//                } else {
-//                    Logger.e("ZhihuContentManager", "sectionItemModel");
-//                }
-//                break;
-//        }
-//    }
-
     /**
      * 将BeforeModel设置到Adapter，并通知更新数据
      */
     public void notifyRecyvlerViewAdapter() {
-
-
+        //获取sectionItemModel数据
         sectionItemModel = sectionItemActivityPresenter.getSectionItemModel();
 
         toolbar.setTitle(sectionItemModel.getName());
@@ -141,9 +96,7 @@ public class SectionItemActivity extends BaseActivity implements MvpView {
         sectionItemModels.clear();
         sectionItemModels.add(sectionItemModel);
 
-//        sectionItemRecyclerAdapter.setSectionItemModels(null);
         sectionItemRecyclerAdapter.setSectionItemModels(sectionItemModels);
-
         sectionItemRecyclerAdapter.notifyDataSetChanged();
 
         //停止刷新动画

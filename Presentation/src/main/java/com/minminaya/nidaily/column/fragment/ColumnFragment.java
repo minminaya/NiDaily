@@ -35,10 +35,9 @@ public class ColumnFragment extends BaseFragment implements MvpView {
     @BindView(R.id.recycler_view_home_fragment)
     XRecyclerView recyclerView;
 
-    ColumnRecyclerViewAdapter columnRecyclerViewAdapter = null;
-
-    List<SectionsModel> sectionsModels = new ArrayList<>();
-    SectionsModel sectionsModel;
+    private ColumnRecyclerViewAdapter columnRecyclerViewAdapter = null;
+    private List<SectionsModel> sectionsModels = new ArrayList<>();
+    private SectionsModel sectionsModel;
     private ColumnFragmentPresenter columnFragmentPresenter = new ColumnFragmentPresenter();
 
     private static ColumnFragment columnFragment = new ColumnFragment();
@@ -58,14 +57,7 @@ public class ColumnFragment extends BaseFragment implements MvpView {
     @Override
     public void iniView(View view) {
         Logger.e("ColumnFragment", "iniView");
-
-
         columnFragmentPresenter.registerEventBus();
-//        //注册EventBus
-//        if (!EventBus.getDefault().isRegistered(this)) {
-//            EventBus.getDefault().register(this);
-//        }
-
     }
 
     @Override
@@ -78,12 +70,8 @@ public class ColumnFragment extends BaseFragment implements MvpView {
         columnRecyclerViewAdapter = new ColumnRecyclerViewAdapter();
         recyclerView.setAdapter(columnRecyclerViewAdapter);
 
+        //首次请求数据
         columnFragmentPresenter.getEventBusEvent(C.EventBusString.COLUMN_CACHE_ITEM_DOWNLOAD_SUCCESSFUL);
-
-//        sectionsModel = (SectionsModel) ZhihuContentManager.getInstance().getColumnData();
-//        if (sectionsModel != null) {
-//            notifyRecyvlerViewAdapter();
-//        }
 
     }
 
@@ -93,7 +81,7 @@ public class ColumnFragment extends BaseFragment implements MvpView {
         recyclerView.setLoadingListener(new XRecyclerView.LoadingListener() {
             @Override
             public void onRefresh() {
-               columnFragmentPresenter.getEventBusEvent(C.EventBusString.COLUMN_CACHE_ITEM_DOWNLOAD_SUCCESSFUL);
+                columnFragmentPresenter.getEventBusEvent(C.EventBusString.COLUMN_CACHE_ITEM_DOWNLOAD_SUCCESSFUL);
             }
 
             @Override
@@ -117,31 +105,12 @@ public class ColumnFragment extends BaseFragment implements MvpView {
 
     }
 
-//    /**
-//     * 接收来自HttpManager端EventBus的通知，然后重新读取本地数据，通知RecyclerView更新数据
-//     */
-//    @Subscribe(threadMode = ThreadMode.MAIN, priority = 1)
-//    public void getEventBusEvent(Integer eventIndex) {
-//        switch (eventIndex) {
-//            case C.EventBusString.COLUMN_CACHE_ITEM_DOWNLOAD_SUCCESSFUL:
-//
-//                sectionsModel = (SectionsModel) ZhihuContentManager.getInstance().getColumnData();
-//                if (sectionsModel != null) {
-//                    Logger.e("ZhihuContentManager", "getEventBusEvent：" + sectionsModel.getData().get(0).getDescription());
-//                    notifyRecyvlerViewAdapter();
-//                } else {
-//                    Logger.e("ZhihuContentManager", "sectionsModel为空");
-//                }
-//                break;
-//        }
-//    }
 
     /**
      * 将BeforeModel设置到Adapter，并通知更新数据
      */
     public void notifyRecyvlerViewAdapter() {
         sectionsModel = columnFragmentPresenter.getSectionsModel();
-
 
         sectionsModels.clear();
         sectionsModels.add(sectionsModel);

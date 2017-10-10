@@ -1,11 +1,9 @@
 package com.minminaya.nidaily.home.presenter;
 
 import com.minminaya.data.http.model.home.BeforeModel;
-import com.minminaya.data.http.model.home.StoriesBean;
 import com.minminaya.library.util.DateUtils;
 import com.minminaya.library.util.Logger;
 import com.minminaya.nidaily.C;
-import com.minminaya.nidaily.OuterActivity;
 import com.minminaya.nidaily.home.fragment.HomeFragment;
 import com.minminaya.nidaily.manager.ZhihuContentManager;
 import com.minminaya.nidaily.mvp.presenter.base.BasePresenter;
@@ -14,8 +12,6 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * HomeFragment的Presenter

@@ -11,14 +11,10 @@ import com.minminaya.nidaily.App;
 import com.minminaya.nidaily.C;
 import com.minminaya.nidaily.R;
 import com.minminaya.nidaily.base.BaseFragment;
-import com.minminaya.nidaily.manager.ZhihuContentManager;
 import com.minminaya.nidaily.mvp.view.MvpView;
 import com.minminaya.nidaily.topic.adapter.TopicRecyclerViewAdapter;
 import com.minminaya.nidaily.topic.presenter.TopicFragmentPresenter;
 
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,12 +30,13 @@ public class TopicFragment extends BaseFragment implements MvpView {
     @BindView(R.id.recycler_view_home_fragment)
     XRecyclerView recyclerView;
 
-    TopicRecyclerViewAdapter topicRecyclerViewAdapter = null;
+    private TopicRecyclerViewAdapter topicRecyclerViewAdapter = null;
 
-    List<TopicItemModel> topicItemModels = new ArrayList<>();
-    TopicItemModel topicItemModel;
+    private List<TopicItemModel> topicItemModels = new ArrayList<>();
+    private TopicItemModel topicItemModel;
 
     private TopicFragmentPresenter topicFragmentPresenter = new TopicFragmentPresenter();
+
     public static TopicFragment getInstance() {
         return topicFragment;
     }
@@ -58,10 +55,6 @@ public class TopicFragment extends BaseFragment implements MvpView {
     public void iniView(View view) {
         Logger.e("TopicFragment", "iniView");
 
-//        //注册EventBus
-//        if (!EventBus.getDefault().isRegistered(this)) {
-//            EventBus.getDefault().register(this);
-//        }
         topicFragmentPresenter.registerEventBus();
     }
 
@@ -76,11 +69,6 @@ public class TopicFragment extends BaseFragment implements MvpView {
         recyclerView.setAdapter(topicRecyclerViewAdapter);
 
         topicFragmentPresenter.getEventBusEvent(C.EventBusString.TOPIC_CACHE_ITEM_DOWNLOAD_SUCCESSFUL);
-
-//        topicItemModel = (TopicItemModel) ZhihuContentManager.getInstance().getTopicData();
-//        if (topicItemModel != null) {
-//            notifyRecyvlerViewAdapter();
-//        }
 
 
     }
@@ -114,25 +102,6 @@ public class TopicFragment extends BaseFragment implements MvpView {
     public void onFailed(Throwable throwable) {
 
     }
-
-//    /**
-//     * 接收来自HttpManager端EventBus的通知，然后重新读取本地数据，通知RecyclerView更新数据
-//     */
-//    @Subscribe(threadMode = ThreadMode.MAIN, priority = 1)
-//    public void getEventBusEvent(Integer eventIndex) {
-//        switch (eventIndex) {
-//            case C.EventBusString.TOPIC_CACHE_ITEM_DOWNLOAD_SUCCESSFUL:
-//
-//                topicItemModel = (TopicItemModel) ZhihuContentManager.getInstance().getTopicData();
-//                if (topicItemModel != null) {
-//                    Logger.e("ZhihuContentManager", "getEventBusEvent：" + topicItemModel.getOthers().size());
-//                    notifyRecyvlerViewAdapter();
-//                } else {
-//                    Logger.e("ZhihuContentManager", "befoModel为空");
-//                }
-//                break;
-//        }
-//    }
 
     /**
      * 将BeforeModel设置到Adapter，并通知更新数据

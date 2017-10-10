@@ -29,13 +29,19 @@ import io.reactivex.schedulers.Schedulers;
 
 public class HttpManager {
     private static final HttpManager httpManager = new HttpManager();
-    private String hotModelDate;
 
     public static HttpManager getInstance() {
         return httpManager;
     }
 
+    private String hotModelDate;
+
     private int contentId;
+    /**
+     * 标记来自HttpManager发送的数据，默认为不是
+     */
+    public boolean isHttpManagerSend = false;
+
 
     private String date;
     private int themeId;
@@ -54,8 +60,9 @@ public class HttpManager {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(beforeModelObserver);
     }
+
     /**
-     * 连接网络获取相应数据
+     * 连接网络获取HotModel数据
      */
     public void loadHotModel(String date) {
         this.hotModelDate = date;
@@ -65,35 +72,6 @@ public class HttpManager {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(hotModelObserver);
     }
-
-
-    Observer<HotModel> hotModelObserver = new Observer<HotModel>() {
-        @Override
-        public void onSubscribe(Disposable d) {
-
-        }
-
-        @Override
-        public void onNext(HotModel value) {
-            //缓存数据
-            boolean isWrited = CacheAtFileManage.putObjectAtFile(value, C.CacheFileString.HOT_CACHE_FILE_NAME_DATE_IS + hotModelDate);
-            if (isWrited) {
-                Logger.d("HttpManager", "HttpManager:缓存数据成功");
-                //EvenBus 1事件发送
-                EventBus.getDefault().post(C.EventBusString.HOT_CACHE_ITEM_DOWNLOAD_SUCCESSFUL);
-            }
-        }
-
-        @Override
-        public void onError(Throwable e) {
-            e.printStackTrace();
-        }
-
-        @Override
-        public void onComplete() {
-
-        }
-    };
 
     /**
      * 获取相应id的详细内容
@@ -168,21 +146,134 @@ public class HttpManager {
                 .subscribe(columnItemObserver);
     }
 
-    Observer<SectionsModel> columnItemObserver = new Observer<SectionsModel>() {
+    Observer<BeforeModel> beforeModelObserver = new Observer<BeforeModel>() {
         @Override
         public void onSubscribe(Disposable d) {
 
         }
 
         @Override
-        public void onNext(SectionsModel value) {
-            Logger.e("HttpManager", "SectionsModel：" + value.getData().get(0).getDescription());
+        public void onNext(BeforeModel value) {
             //缓存数据
-            boolean isWrited = CacheAtFileManage.putObjectAtFile(value, C.CacheFileString.COLUMN_CACHE_ITEM);
+            boolean isWrited = CacheAtFileManage.putObjectAtFile(value, C.CacheFileString.HOME_CACHE_FILE_NAME_DATE_IS + date);
             if (isWrited) {
-                Logger.d("HttpManager", "HttpManager SectionsModel:缓存数据成功");
+                Logger.d("HttpManager", "HttpManager:缓存数据成功");
                 //EvenBus 1事件发送
-                EventBus.getDefault().post(C.EventBusString.COLUMN_CACHE_ITEM_DOWNLOAD_SUCCESSFUL);
+                EventBus.getDefault().post(C.EventBusString.FROM_HTTPMANAGER_TO_ZHIHU_CONTENT_MANAGER);
+            }
+        }
+
+        @Override
+        public void onError(Throwable e) {
+            e.printStackTrace();
+        }
+
+        @Override
+        public void onComplete() {
+
+        }
+    };
+    Observer<HotModel> hotModelObserver = new Observer<HotModel>() {
+        @Override
+        public void onSubscribe(Disposable d) {
+
+        }
+
+        @Override
+        public void onNext(HotModel value) {
+            //缓存数据
+            boolean isWrited = CacheAtFileManage.putObjectAtFile(value, C.CacheFileString.HOT_CACHE_FILE_NAME_DATE_IS + hotModelDate);
+            if (isWrited) {
+                Logger.d("HttpManager", "HttpManager:缓存数据成功");
+                //EvenBus 1事件发送
+                EventBus.getDefault().post(C.EventBusString.HOT_CACHE_ITEM_DOWNLOAD_SUCCESSFUL);
+            }
+        }
+
+        @Override
+        public void onError(Throwable e) {
+            e.printStackTrace();
+        }
+
+        @Override
+        public void onComplete() {
+
+        }
+    };
+    Observer<ContentModel> contentObserver = new Observer<ContentModel>() {
+        @Override
+        public void onSubscribe(Disposable d) {
+
+        }
+
+        @Override
+        public void onNext(ContentModel value) {
+
+
+            //缓存数据
+            boolean isWrited = CacheAtFileManage.putObjectAtFile(value, C.CacheFileString.CONTENT_CACHE_AND_ID_IS + contentId);
+            if (isWrited) {
+                Logger.d("HttpManager", "HttpManager:缓存数据成功");
+                //EvenBus 1事件发送
+                isHttpManagerSend = true;
+                EventBus.getDefault().post(contentId);
+            }
+
+        }
+
+        @Override
+        public void onError(Throwable e) {
+            e.printStackTrace();
+        }
+
+        @Override
+        public void onComplete() {
+            Logger.d("WebContentActivity", "加载成功");
+        }
+    };
+    Observer<TopicItemModel> topicItemObserver = new Observer<TopicItemModel>() {
+        @Override
+        public void onSubscribe(Disposable d) {
+
+        }
+
+        @Override
+        public void onNext(TopicItemModel value) {
+            Logger.e("HttpManager", "TopicItem：" + value.getOthers().get(0).getName());
+            //缓存数据
+            boolean isWrited = CacheAtFileManage.putObjectAtFile(value, C.CacheFileString.TOPIC_CACHE_ITEM);
+            if (isWrited) {
+                Logger.d("HttpManager", "HttpManager:缓存数据成功");
+                //EvenBus 1事件发送
+                EventBus.getDefault().post(C.EventBusString.TOPIC_CACHE_ITEM_DOWNLOAD_SUCCESSFUL);
+            }
+        }
+
+        @Override
+        public void onError(Throwable e) {
+            e.printStackTrace();
+        }
+
+        @Override
+        public void onComplete() {
+
+        }
+    };
+    Observer<ThemeItemModel> themeItemObserver = new Observer<ThemeItemModel>() {
+        @Override
+        public void onSubscribe(Disposable d) {
+
+        }
+
+        @Override
+        public void onNext(ThemeItemModel value) {
+            Logger.e("HttpManager", "ThemeItemModel：" + value.getDescription());
+            //缓存数据
+            boolean isWrited = CacheAtFileManage.putObjectAtFile(value, C.CacheFileString.THEME_CACHE_ITEM + date + themeId);
+            if (isWrited) {
+                Logger.d("HttpManager", "HttpManager themeItemObserver:缓存数据成功");
+                //EvenBus 1事件发送
+                EventBus.getDefault().post(C.EventBusString.THEME_CACHE_ITEM_DOWNLOAD_SUCCESSFUL);
             }
         }
 
@@ -224,22 +315,21 @@ public class HttpManager {
 
         }
     };
-
-    Observer<ThemeItemModel> themeItemObserver = new Observer<ThemeItemModel>() {
+    Observer<SectionsModel> columnItemObserver = new Observer<SectionsModel>() {
         @Override
         public void onSubscribe(Disposable d) {
 
         }
 
         @Override
-        public void onNext(ThemeItemModel value) {
-            Logger.e("HttpManager", "ThemeItemModel：" + value.getDescription());
+        public void onNext(SectionsModel value) {
+            Logger.e("HttpManager", "SectionsModel：" + value.getData().get(0).getDescription());
             //缓存数据
-            boolean isWrited = CacheAtFileManage.putObjectAtFile(value, C.CacheFileString.THEME_CACHE_ITEM + date + themeId);
+            boolean isWrited = CacheAtFileManage.putObjectAtFile(value, C.CacheFileString.COLUMN_CACHE_ITEM);
             if (isWrited) {
-                Logger.d("HttpManager", "HttpManager themeItemObserver:缓存数据成功");
+                Logger.d("HttpManager", "HttpManager SectionsModel:缓存数据成功");
                 //EvenBus 1事件发送
-                EventBus.getDefault().post(C.EventBusString.THEME_CACHE_ITEM_DOWNLOAD_SUCCESSFUL);
+                EventBus.getDefault().post(C.EventBusString.COLUMN_CACHE_ITEM_DOWNLOAD_SUCCESSFUL);
             }
         }
 
@@ -254,95 +344,5 @@ public class HttpManager {
         }
     };
 
-
-    Observer<TopicItemModel> topicItemObserver = new Observer<TopicItemModel>() {
-        @Override
-        public void onSubscribe(Disposable d) {
-
-        }
-
-        @Override
-        public void onNext(TopicItemModel value) {
-            Logger.e("HttpManager", "TopicItem：" + value.getOthers().get(0).getName());
-            //缓存数据
-            boolean isWrited = CacheAtFileManage.putObjectAtFile(value, C.CacheFileString.TOPIC_CACHE_ITEM);
-            if (isWrited) {
-                Logger.d("HttpManager", "HttpManager:缓存数据成功");
-                //EvenBus 1事件发送
-                EventBus.getDefault().post(C.EventBusString.TOPIC_CACHE_ITEM_DOWNLOAD_SUCCESSFUL);
-            }
-        }
-
-        @Override
-        public void onError(Throwable e) {
-            e.printStackTrace();
-        }
-
-        @Override
-        public void onComplete() {
-
-        }
-    };
-
-
-    Observer<ContentModel> contentObserver = new Observer<ContentModel>() {
-        @Override
-        public void onSubscribe(Disposable d) {
-
-        }
-
-        @Override
-        public void onNext(ContentModel value) {
-
-
-            //缓存数据
-            boolean isWrited = CacheAtFileManage.putObjectAtFile(value, C.CacheFileString.CONTENT_CACHE_AND_ID_IS + contentId);
-            if (isWrited) {
-                Logger.d("HttpManager", "HttpManager:缓存数据成功");
-                //EvenBus 1事件发送
-                EventBus.getDefault().post(contentId);
-            }
-
-        }
-
-        @Override
-        public void onError(Throwable e) {
-            e.printStackTrace();
-        }
-
-        @Override
-        public void onComplete() {
-            Logger.d("WebContentActivity", "加载成功");
-        }
-    };
-
-
-    Observer<BeforeModel> beforeModelObserver = new Observer<BeforeModel>() {
-        @Override
-        public void onSubscribe(Disposable d) {
-
-        }
-
-        @Override
-        public void onNext(BeforeModel value) {
-            //缓存数据
-            boolean isWrited = CacheAtFileManage.putObjectAtFile(value, C.CacheFileString.HOME_CACHE_FILE_NAME_DATE_IS + date);
-            if (isWrited) {
-                Logger.d("HttpManager", "HttpManager:缓存数据成功");
-                //EvenBus 1事件发送
-                EventBus.getDefault().post(C.EventBusString.FROM_HTTPMANAGER_TO_ZHIHU_CONTENT_MANAGER);
-            }
-        }
-
-        @Override
-        public void onError(Throwable e) {
-            e.printStackTrace();
-        }
-
-        @Override
-        public void onComplete() {
-
-        }
-    };
 
 }

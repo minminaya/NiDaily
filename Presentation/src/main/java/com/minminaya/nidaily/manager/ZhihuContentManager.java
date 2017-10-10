@@ -1,14 +1,8 @@
 package com.minminaya.nidaily.manager;
 
 import com.minminaya.data.cache.CacheAtFileManage;
-import com.minminaya.data.http.model.home.BeforeModel;
 import com.minminaya.library.util.Logger;
-import com.minminaya.nidaily.App;
 import com.minminaya.nidaily.C;
-
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
 
 /**
  * 知乎RestAPI数据的管理类
@@ -24,6 +18,9 @@ public class ZhihuContentManager {
         return mZhihuContentManager;
     }
 
+    /**
+     * 加载首页的列表数据
+     */
     public Object getData(String date) {
         //首先读取缓存中的数据
         Object object = CacheAtFileManage.getObjectAtFile(C.CacheFileString.HOME_CACHE_FILE_NAME_DATE_IS + date);
@@ -32,11 +29,11 @@ public class ZhihuContentManager {
             Logger.e("ZhihuContentManager", "object不为空");
             return object;
         } else {
-
             HttpManager.getInstance().connectRestAPI(date);
         }
         return null;
     }
+
     public Object getHotData(String date) {
         //首先读取缓存中的数据
         Object object = CacheAtFileManage.getObjectAtFile(C.CacheFileString.HOT_CACHE_FILE_NAME_DATE_IS + date);
@@ -45,7 +42,6 @@ public class ZhihuContentManager {
             Logger.e("ZhihuContentManager", "object不为空");
             return object;
         } else {
-
             HttpManager.getInstance().loadHotModel(date);
         }
         return null;

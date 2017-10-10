@@ -8,7 +8,6 @@ import android.view.View;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.minminaya.data.http.model.hot.HotModel;
 import com.minminaya.data.http.model.hot.RecentBean;
-import com.minminaya.library.util.DateUtils;
 import com.minminaya.library.util.Logger;
 import com.minminaya.nidaily.App;
 import com.minminaya.nidaily.C;
@@ -16,12 +15,8 @@ import com.minminaya.nidaily.R;
 import com.minminaya.nidaily.base.BaseFragment;
 import com.minminaya.nidaily.hot.adapter.HotRecyclerViewAdapter;
 import com.minminaya.nidaily.hot.presenter.HotFragmentPresenter;
-import com.minminaya.nidaily.manager.ZhihuContentManager;
 import com.minminaya.nidaily.mvp.view.MvpView;
 
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -66,11 +61,6 @@ public class HotFragment extends BaseFragment implements MvpView {
         Logger.e("HotFragment", "iniView");
 
         hotFragmentPresenter.registerEventBus();
-//        //注册EventBus
-//        if (!EventBus.getDefault().isRegistered(this)) {
-//            EventBus.getDefault().register(this);
-//        }
-
     }
 
     @Override
@@ -83,14 +73,6 @@ public class HotFragment extends BaseFragment implements MvpView {
         mHotRecyclerViewAdapter = new HotRecyclerViewAdapter();
         recyclerView.setAdapter(mHotRecyclerViewAdapter);
 
-
-//        //加载最新一天的数据
-//        Object object = ZhihuContentManager.getInstance().getHotData(DateUtils.getBeforeDayTime(dateIndex));
-//
-//        if (object != null) {
-//            hotModel = (HotModel) object;
-//            notifyRecyvlerViewAdapter();
-//        }
         hotFragmentPresenter.getEventBusEvent(C.EventBusString.HOT_CACHE_ITEM_DOWNLOAD_SUCCESSFUL);
 
 
@@ -103,10 +85,10 @@ public class HotFragment extends BaseFragment implements MvpView {
             @Override
             public void onRefresh() {
                 Log.d("HotFragment onRefresh", "onRefresh");
+
                 dateIndex = 1;
                 //标记当前状态为刷新状态
                 isRefresh = true;
-//                getEventBusEvent(C.EventBusString.HOT_CACHE_ITEM_DOWNLOAD_SUCCESSFUL);
 
                 hotFragmentPresenter.setDateIndex(dateIndex);
                 hotFragmentPresenter.getEventBusEvent(C.EventBusString.HOT_CACHE_ITEM_DOWNLOAD_SUCCESSFUL);
@@ -135,26 +117,6 @@ public class HotFragment extends BaseFragment implements MvpView {
 
     }
 
-//    /**
-//     * 接收来自HttpManager端EventBus的通知，然后重新读取本地数据，通知RecyclerView更新数据
-//     */
-//    @Subscribe(threadMode = ThreadMode.MAIN, priority = 1)
-//    public void getEventBusEvent(Integer eventIndex) {
-//        switch (eventIndex) {
-//            case C.EventBusString.HOT_CACHE_ITEM_DOWNLOAD_SUCCESSFUL:
-//                Logger.e("ZhihuContentManager", "getEventBusEvent");
-//
-//                hotModel = (HotModel) ZhihuContentManager.getInstance().getHotData(DateUtils.getBeforeDayTime(dateIndex));
-//                if (hotModel != null) {
-//                    Logger.e("ZhihuContentManager", "getEventBusEvent：" + hotModel.getRecent().get(0).getTitle());
-//                    notifyRecyvlerViewAdapter();
-//                } else {
-//                    Logger.e("ZhihuContentManager", "hotModel为空");
-//                }
-//                break;
-//        }
-//    }
-
     /**
      * 将BeforeModel设置到Adapter，并通知更新数据
      */
@@ -173,6 +135,5 @@ public class HotFragment extends BaseFragment implements MvpView {
         mHotRecyclerViewAdapter.notifyDataSetChanged();
         recyclerView.refreshComplete();
     }
-
 
 }

@@ -15,7 +15,9 @@ import com.minminaya.library.util.Logger;
 import com.minminaya.nidaily.C;
 import com.minminaya.nidaily.R;
 import com.minminaya.nidaily.base.BaseActivity;
+import com.minminaya.nidaily.content.presenter.WebContentActivityPresenter;
 import com.minminaya.nidaily.manager.ZhihuContentManager;
+import com.minminaya.nidaily.mvp.view.MvpView;
 import com.minminaya.nidaily.util.HtmlUtil;
 
 import org.greenrobot.eventbus.EventBus;
@@ -29,7 +31,7 @@ import butterknife.BindView;
  * Created by Niwa on 2017/10/1.
  */
 
-public class WebContentActivity extends BaseActivity {
+public class WebContentActivity extends BaseActivity implements MvpView {
     @BindView(R.id.web_view_web_content)
     WebView webViewWebContent;
     @BindView(R.id.img_at_web_content_activity)
@@ -42,11 +44,13 @@ public class WebContentActivity extends BaseActivity {
     ProgressBar progressBar;
 
     private ContentModel contentModel;
+
     /**
      * 当前item的id
      */
     private int id = 0x0000;
 
+    private WebContentActivityPresenter mWebContentActivityPresenter = new WebContentActivityPresenter();
     /**
      * Activity跳转，传入当前item的id
      *
@@ -70,18 +74,13 @@ public class WebContentActivity extends BaseActivity {
 
         progressBar.setVisibility(View.VISIBLE);
 
-        if (!EventBus.getDefault().isRegistered(this)) {
-            EventBus.getDefault().register(this);
-        }
+        mWebContentActivityPresenter.attachView(this);
+        mWebContentActivityPresenter.registerEventBus();
 
         Intent intent = getIntent();
         if (intent != null) {
             id = intent.getIntExtra(C.ActivityLoadString.LOAD_CONTENT_ACTIVITY, -1);
-
-            contentModel = (ContentModel) ZhihuContentManager.getInstance().getContentFromId(id);
-            if (contentModel != null) {
-                setViewData(contentModel);
-            }
+            mWebContentActivityPresenter.getEventBusEvent(id);
         }
 
     }
@@ -100,28 +99,14 @@ public class WebContentActivity extends BaseActivity {
     @Override
     public void unBind() {
         //移除当前EventBus
-        EventBus.getDefault().unregister(this);
-    }
-
-    /**
-     * 接收来自HttpManager端EventBus的通知，然后重新读取本地数据，通知RecyclerView更新数据
-     */
-    @Subscribe(threadMode = ThreadMode.POSTING, priority = 56)
-    public void getEventBusEvent(Integer index) {
-
-        Logger.e("WebContentActivity", "getEventBusEvent");
-        contentModel = (ContentModel) ZhihuContentManager.getInstance().getContentFromId(index);
-        Logger.e("WebContentActivity", "getEventBusEvent：" + contentModel.getId());
-
-        setViewData(contentModel);
-
-        EventBus.getDefault().cancelEventDelivery(index);
+        mWebContentActivityPresenter.unReristerEventBus();
+        mWebContentActivityPresenter.detachView(this);
     }
 
     /**
      * 将contentModel中数据设置到view中
      */
-    private void setViewData(ContentModel contentModel) {
+    public void setViewData(ContentModel contentModel) {
 
         Logger.e("WebContentActivity setViewData", "id:" + contentModel.getId());
         //webView中的内容
@@ -135,6 +120,11 @@ public class WebContentActivity extends BaseActivity {
         tvDetailTitle.setText(contentModel.getTitle());
 
         tvImageSource.setText(contentModel.getImage_source());
+    }
+
+    @Override
+    public void onFailed(Throwable throwable) {
+
     }
 }
 

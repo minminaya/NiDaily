@@ -171,7 +171,7 @@ public class HomeFragment extends BaseFragment implements MvpView {
             ultraViewPager.setAdapter(mHomeScrollViewAdapter);
 
             recyclerView.addHeaderView(headview);
-            headview = null;//headView回收
+//            headview = null;//headView回收
         }
 
     }

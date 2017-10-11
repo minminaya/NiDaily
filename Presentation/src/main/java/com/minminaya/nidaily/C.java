@@ -18,6 +18,7 @@ public class C {
         public static final String TOPIC_CACHE_ITEM = "topic_cache_item";
         public static final String THEME_CACHE_ITEM = "theme_cache_item_is_";
         public static final String SECTION_CACHE_ITEM = "section_cache_item_is_";
+        public static final String LATEST_CACHE_ITEM = "latest_cache_item_is_";
         public static final String COLUMN_CACHE_ITEM = "column_cache_item";
 
     }
@@ -33,6 +34,7 @@ public class C {
         public static final int SECTION_CACHE_ITEM_DOWNLOAD_SUCCESSFUL = 0x66aa4fff;
         public static final int COLUMN_CACHE_ITEM_DOWNLOAD_SUCCESSFUL = 0x66fe4fff;
         public static final int HOT_CACHE_ITEM_DOWNLOAD_SUCCESSFUL = 0x66fe7fff;
+        public static final int HOME_LATEST_CACHE_ITEM_DOWNLOAD_SUCCESSFUL = 0x66fe7aff;
     }
 
     public static class BundleKeyString {

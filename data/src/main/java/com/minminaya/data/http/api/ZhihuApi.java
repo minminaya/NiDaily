@@ -4,6 +4,7 @@ import com.minminaya.data.http.model.column.SectionItemModel;
 import com.minminaya.data.http.model.column.SectionsModel;
 import com.minminaya.data.http.model.content.ContentModel;
 import com.minminaya.data.http.model.home.BeforeModel;
+import com.minminaya.data.http.model.home.LatestInfoModel;
 import com.minminaya.data.http.model.hot.HotModel;
 import com.minminaya.data.http.model.topic.ThemeItemModel;
 import com.minminaya.data.http.model.topic.TopicItemModel;
@@ -71,6 +72,12 @@ public interface ZhihuApi {
      */
     @GET("3/news/hot")
     Observable<HotModel> loadHotModel();
+
+    /**
+     * 获取letest页的最新数据，用来构造头部滚动view
+     */
+    @GET("4/news/latest")
+    Observable<LatestInfoModel> loadLatestInfoModel();
 
 
 }

@@ -1,33 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:foreground="?android:attr/selectableItemBackground"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:clickable="true"
+    android:layout_height="200dp"
+    android:layout_marginBottom="3dp">
 
-    <RelativeLayout
+    <ImageView
+        android:id="@+id/img_head_view"
         android:layout_width="match_parent"
         android:layout_height="200dp"
-        android:layout_marginBottom="3dp">
+        android:scaleType="centerCrop" />
 
-        <ImageView
-            android:id="@+id/img_head_view"
-            android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:scaleType="centerCrop" />
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:background="@drawable/black_bg" />
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:background="@drawable/black_bg" />
-
-        <TextView
-            android:id="@+id/tv_description_head_view"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
-            android:padding="10dp"
-            android:text="了解自己和别人，了解彼此的欲望和局限"
-            android:textColor="@android:color/white"
-            android:textSize="16sp" />
-    </RelativeLayout>
+    <TextView
+        android:id="@+id/tv_description_head_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:padding="10dp"
+        android:text="了解自己和别人，了解彼此的欲望和局限"
+        android:textColor="@android:color/white"
+        android:textSize="16sp" />
 </RelativeLayout>

@@ -3,19 +3,24 @@ package com.minminaya.nidaily.home.fragment;
 
 import android.support.v7.widget.LinearLayoutManager;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.minminaya.data.http.model.home.BeforeModel;
+import com.minminaya.data.http.model.home.LatestInfoModel;
 import com.minminaya.data.http.model.home.StoriesBean;
+import com.minminaya.data.http.model.home.TopStoriesBean;
 import com.minminaya.library.util.Logger;
 import com.minminaya.nidaily.App;
 import com.minminaya.nidaily.C;
 import com.minminaya.nidaily.R;
 import com.minminaya.nidaily.base.BaseFragment;
 import com.minminaya.nidaily.home.adapter.HomeRecyclerViewAdapter;
+import com.minminaya.nidaily.home.adapter.HomeScrollViewAdapter;
 import com.minminaya.nidaily.home.presenter.HomeFragmentPresenter;
 import com.minminaya.nidaily.mvp.view.MvpView;
+import com.tmall.ultraviewpager.UltraViewPager;
 
 
 import java.util.ArrayList;
@@ -31,23 +36,25 @@ public class HomeFragment extends BaseFragment implements MvpView {
 
     @BindView(R.id.recycler_view_home_fragment)
     XRecyclerView recyclerView;
-    HomeRecyclerViewAdapter mHomeRecyclerViewAdapter;
 
-    BeforeModel beforeModel = null;
-
+    private HomeRecyclerViewAdapter mHomeRecyclerViewAdapter;
+    private HomeScrollViewAdapter mHomeScrollViewAdapter = null;
+    private View headview = null;
+    private BeforeModel beforeModel = null;
+    private LatestInfoModel mLatestInfoModel = null;
+    private List<TopStoriesBean> topStoriesBeanList = new ArrayList<>();
     /**
      * 时间的前后标志，用于刷新数据，默认为最新一天
      */
     private int dateIndex = 1;
     private boolean isRefresh = false;
-    List<StoriesBean> storiesBeanList = new ArrayList<>();
+    private List<StoriesBean> storiesBeanList = new ArrayList<>();
     private HomeFragmentPresenter homeFragmentPresenter = new HomeFragmentPresenter();
 
 
     public static HomeFragment getInstance() {
         return homeFragment;
     }
-
 
     @Override
     protected void unBind() {
@@ -76,6 +83,8 @@ public class HomeFragment extends BaseFragment implements MvpView {
         //首次加载数据
         homeFragmentPresenter.getEventBusEvent(C.EventBusString.FROM_HTTPMANAGER_TO_ZHIHU_CONTENT_MANAGER);
 
+        //头部view数据请求
+        homeFragmentPresenter.loadLatestInfo();
     }
 
 
@@ -90,6 +99,8 @@ public class HomeFragment extends BaseFragment implements MvpView {
                 isRefresh = true;
                 homeFragmentPresenter.setDateIndex(dateIndex);
                 homeFragmentPresenter.getEventBusEvent(C.EventBusString.FROM_HTTPMANAGER_TO_ZHIHU_CONTENT_MANAGER);
+                //头部view数据请求
+                homeFragmentPresenter.loadLatestInfo();
             }
 
             @Override
@@ -132,10 +143,36 @@ public class HomeFragment extends BaseFragment implements MvpView {
             storiesBeanList.addAll(beforeModel.getStories());
         }
 
-
         mHomeRecyclerViewAdapter.setStoriesBeanList(storiesBeanList);
         mHomeRecyclerViewAdapter.notifyDataSetChanged();
+
         recyclerView.refreshComplete();
     }
 
+    /**
+     * 创建头部headview并通知headview的adapter更新数据
+     */
+    public void notifyHeadViewAdapter() {
+        Logger.e("HomeFragment--notifyHeadViewAdapter", "notifyHeadViewAdapter");
+        if (headview == null) {
+            mLatestInfoModel = homeFragmentPresenter.getLatestInfoModel();
+            topStoriesBeanList.clear();
+            topStoriesBeanList.addAll(mLatestInfoModel.getTop_stories());
+
+            //初始化头部View
+            headview = LayoutInflater.from(this.getContext()).inflate(R.layout.view_home_head, null);
+            UltraViewPager ultraViewPager = headview.findViewById(R.id.ultra_viewpager);
+
+            ultraViewPager.setInfiniteLoop(true);
+            ultraViewPager.setAutoScroll(3000);
+
+            mHomeScrollViewAdapter = new HomeScrollViewAdapter();
+            mHomeScrollViewAdapter.setTopStoriesBean(topStoriesBeanList);
+            ultraViewPager.setAdapter(mHomeScrollViewAdapter);
+
+            recyclerView.addHeaderView(headview);
+            headview = null;//headView回收
+        }
+
+    }
 }

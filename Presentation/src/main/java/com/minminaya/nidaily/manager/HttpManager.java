@@ -7,6 +7,7 @@ import com.minminaya.data.http.model.column.SectionItemModel;
 import com.minminaya.data.http.model.column.SectionsModel;
 import com.minminaya.data.http.model.content.ContentModel;
 import com.minminaya.data.http.model.home.BeforeModel;
+import com.minminaya.data.http.model.home.LatestInfoModel;
 import com.minminaya.data.http.model.hot.HotModel;
 import com.minminaya.data.http.model.topic.ThemeItemModel;
 import com.minminaya.data.http.model.topic.TopicItemModel;
@@ -29,6 +30,7 @@ import io.reactivex.schedulers.Schedulers;
 
 public class HttpManager {
     private static final HttpManager httpManager = new HttpManager();
+    private String latestDate;
 
     public static HttpManager getInstance() {
         return httpManager;
@@ -144,6 +146,18 @@ public class HttpManager {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe(columnItemObserver);
+    }
+
+    /**
+     * 获取相应Latest页数据
+     */
+    public void loadLatestInfo(String date) {
+        this.latestDate = date;
+        NetWorkForRestApi.getZhihuApi()
+                .loadLatestInfoModel()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(latestInfoModelObserver);
     }
 
     Observer<BeforeModel> beforeModelObserver = new Observer<BeforeModel>() {
@@ -330,6 +344,33 @@ public class HttpManager {
                 Logger.d("HttpManager", "HttpManager SectionsModel:缓存数据成功");
                 //EvenBus 1事件发送
                 EventBus.getDefault().post(C.EventBusString.COLUMN_CACHE_ITEM_DOWNLOAD_SUCCESSFUL);
+            }
+        }
+
+        @Override
+        public void onError(Throwable e) {
+            e.printStackTrace();
+        }
+
+        @Override
+        public void onComplete() {
+
+        }
+    };
+    Observer<LatestInfoModel> latestInfoModelObserver = new Observer<LatestInfoModel>() {
+        @Override
+        public void onSubscribe(Disposable d) {
+
+        }
+
+        @Override
+        public void onNext(LatestInfoModel value) {
+            //缓存数据
+            boolean isWrited = CacheAtFileManage.putObjectAtFile(value, C.CacheFileString.LATEST_CACHE_ITEM + latestDate);
+            if (isWrited) {
+                Logger.d("HttpManager", "HttpManager:缓存数据成功");
+                //EvenBus 1事件发送
+                EventBus.getDefault().post(C.EventBusString.HOME_LATEST_CACHE_ITEM_DOWNLOAD_SUCCESSFUL);
             }
         }
 

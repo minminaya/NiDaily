@@ -152,8 +152,8 @@ public class MainActivity extends BaseActivity
         } else {
             SnackbarUtils.with(getWindow().getDecorView())
                     .setMessage("要离开我了吗")
-                    .setDuration(SnackbarUtils.LENGTH_INDEFINITE)
-                    .setBottomMargin(314)
+                    .setDuration(SnackbarUtils.LENGTH_LONG)
+                    .setBottomMargin(313)
                     .setBgColor(Color.parseColor("#009688"))
                     .setAction("是", Color.parseColor("#FF4081"), new View.OnClickListener() {
                         @Override

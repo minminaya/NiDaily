@@ -126,7 +126,7 @@ public class MainActivity extends BaseActivity
         toggle.syncState();
         navigationView.setNavigationItemSelectedListener(this);
 
-        View view = LayoutInflater.from(App.getINSTANCE()).inflate(R.layout.nav_header_outer, null);
+        View view = LayoutInflater.from(this).inflate(R.layout.nav_header_outer, null);
         view.findViewById(R.id.imageView).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

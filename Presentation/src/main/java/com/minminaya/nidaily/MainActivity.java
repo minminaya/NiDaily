@@ -1,18 +1,23 @@
 package com.minminaya.nidaily;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.FrameLayout;
 
 import com.blankj.utilcode.util.FragmentUtils;
+import com.blankj.utilcode.util.SnackbarUtils;
 import com.minminaya.library.util.Logger;
 import com.minminaya.nidaily.base.BaseActivity;
 import com.minminaya.nidaily.column.fragment.ColumnFragment;
@@ -73,7 +78,7 @@ public class MainActivity extends BaseActivity
                         FragmentUtils.hideFragment(ColumnFragment.getInstance());
 
                         setTitle("首页");
-                        Logger.e("OuterActivity", "home");
+                        Logger.e("MainActivity", "home");
                         break;
                     case R.id.hot:
                         FragmentUtils.hideFragment(HomeFragment.getInstance());
@@ -83,7 +88,7 @@ public class MainActivity extends BaseActivity
 
                         setTitle("热门");
 
-                        Logger.e("OuterActivity", "hot");
+                        Logger.e("MainActivity", "hot");
                         break;
                     case R.id.topic:
                         FragmentUtils.hideFragment(HomeFragment.getInstance());
@@ -93,7 +98,7 @@ public class MainActivity extends BaseActivity
 
                         setTitle("主题");
 
-                        Logger.e("OuterActivity", "topic");
+                        Logger.e("MainActivity", "topic");
                         break;
                     case R.id.column:
                         FragmentUtils.hideFragment(HomeFragment.getInstance());
@@ -103,7 +108,7 @@ public class MainActivity extends BaseActivity
 
                         setTitle("栏目");
 
-                        Logger.e("OuterActivity", "column");
+                        Logger.e("MainActivity", "column");
                         break;
                 }
                 return true;
@@ -121,6 +126,16 @@ public class MainActivity extends BaseActivity
         toggle.syncState();
         navigationView.setNavigationItemSelectedListener(this);
 
+        View view = LayoutInflater.from(App.getINSTANCE()).inflate(R.layout.nav_header_outer, null);
+        view.findViewById(R.id.imageView).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Logger.e("MainActivity--navigationView--click", "viewId:" + v.getId());
+            }
+        });
+
+        navigationView.addHeaderView(view);
+
 
     }
 
@@ -135,7 +150,17 @@ public class MainActivity extends BaseActivity
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-            super.onBackPressed();
+            SnackbarUtils.with(getWindow().getDecorView())
+                    .setMessage("要离开我了吗")
+                    .setDuration(SnackbarUtils.LENGTH_INDEFINITE)
+                    .setBottomMargin(314)
+                    .setBgColor(Color.parseColor("#009688"))
+                    .setAction("是", Color.parseColor("#FF4081"), new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            MainActivity.super.onBackPressed();
+                        }
+                    }).show();
         }
     }
 
@@ -145,17 +170,15 @@ public class MainActivity extends BaseActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
+        if (id == R.id.nav_issue) {
             // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
+        } else if (id == R.id.nav_suggestion) {
 
-        } else if (id == R.id.nav_slideshow) {
+        } else if (id == R.id.nav_about) {
 
         } else if (id == R.id.nav_manage) {
 
         } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
 
         }
 

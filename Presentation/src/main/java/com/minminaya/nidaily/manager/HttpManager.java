@@ -160,7 +160,7 @@ public class HttpManager {
                 .subscribe(latestInfoModelObserver);
     }
 
-    Observer<BeforeModel> beforeModelObserver = new Observer<BeforeModel>() {
+    private Observer<BeforeModel> beforeModelObserver = new Observer<BeforeModel>() {
         @Override
         public void onSubscribe(Disposable d) {
 
@@ -187,7 +187,7 @@ public class HttpManager {
 
         }
     };
-    Observer<HotModel> hotModelObserver = new Observer<HotModel>() {
+    private Observer<HotModel> hotModelObserver = new Observer<HotModel>() {
         @Override
         public void onSubscribe(Disposable d) {
 
@@ -214,7 +214,7 @@ public class HttpManager {
 
         }
     };
-    Observer<ContentModel> contentObserver = new Observer<ContentModel>() {
+    private Observer<ContentModel> contentObserver = new Observer<ContentModel>() {
         @Override
         public void onSubscribe(Disposable d) {
 
@@ -222,8 +222,6 @@ public class HttpManager {
 
         @Override
         public void onNext(ContentModel value) {
-
-
             //缓存数据
             boolean isWrited = CacheAtFileManage.putObjectAtFile(value, C.CacheFileString.CONTENT_CACHE_AND_ID_IS + contentId);
             if (isWrited) {
@@ -245,7 +243,7 @@ public class HttpManager {
             Logger.d("WebContentActivity", "加载成功");
         }
     };
-    Observer<TopicItemModel> topicItemObserver = new Observer<TopicItemModel>() {
+    private Observer<TopicItemModel> topicItemObserver = new Observer<TopicItemModel>() {
         @Override
         public void onSubscribe(Disposable d) {
 
@@ -273,7 +271,7 @@ public class HttpManager {
 
         }
     };
-    Observer<ThemeItemModel> themeItemObserver = new Observer<ThemeItemModel>() {
+    private Observer<ThemeItemModel> themeItemObserver = new Observer<ThemeItemModel>() {
         @Override
         public void onSubscribe(Disposable d) {
 
@@ -301,7 +299,7 @@ public class HttpManager {
 
         }
     };
-    Observer<SectionItemModel> sectionItemObserver = new Observer<SectionItemModel>() {
+    private Observer<SectionItemModel> sectionItemObserver = new Observer<SectionItemModel>() {
         @Override
         public void onSubscribe(Disposable d) {
 
@@ -329,7 +327,7 @@ public class HttpManager {
 
         }
     };
-    Observer<SectionsModel> columnItemObserver = new Observer<SectionsModel>() {
+    private Observer<SectionsModel> columnItemObserver = new Observer<SectionsModel>() {
         @Override
         public void onSubscribe(Disposable d) {
 
@@ -357,7 +355,7 @@ public class HttpManager {
 
         }
     };
-    Observer<LatestInfoModel> latestInfoModelObserver = new Observer<LatestInfoModel>() {
+    private Observer<LatestInfoModel> latestInfoModelObserver = new Observer<LatestInfoModel>() {
         @Override
         public void onSubscribe(Disposable d) {
 

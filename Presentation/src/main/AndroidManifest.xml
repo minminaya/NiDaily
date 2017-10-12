@@ -15,9 +15,12 @@
         android:theme="@style/AppTheme"
         tools:replace="android:name">
         <activity
-            android:name=".MainActivity"
+            android:name="MainActivity"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".SplashActivity"
+            android:theme="@style/AppTheme.NoActionBar.FullScreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -27,6 +30,7 @@
         <activity
             android:name=".content.activity.WebContentActivity"
             android:theme="@style/AppTheme.NoActionBar.FullScreen" />
+
         <activity
             android:name=".topic.activity.ThemeItemActivity"
             android:theme="@style/AppTheme.NoActionBar" />

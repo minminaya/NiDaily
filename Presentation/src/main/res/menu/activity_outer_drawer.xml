@@ -3,6 +3,10 @@
 
     <group android:checkableBehavior="single">
         <item
+            android:id="@+id/nav_clear"
+            android:icon="@drawable/icon_suggestion"
+            android:title="清除缓存" />
+        <item
             android:id="@+id/nav_issue"
             android:icon="@drawable/icon_issue"
             android:title="issue" />

@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.blankj.utilcode.util.BarUtils;
 import com.bumptech.glide.Glide;
 import com.minminaya.data.http.model.content.ContentModel;
 import com.minminaya.library.util.Logger;
@@ -114,6 +115,7 @@ public class WebContentActivity extends BaseActivity implements MvpView {
         webViewWebContent.loadData(htmlData, HtmlUtil.MIME_TYPE, HtmlUtil.ENCODING);
 
         progressBar.setVisibility(View.GONE);
+        BarUtils.hideNavBar(this);//隐藏导航栏
 
         Glide.with(WebContentActivity.this).load(contentModel.getImage()).error(R.mipmap.ic_error).into(img);
 

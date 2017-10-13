@@ -129,15 +129,15 @@ public class ZhihuContentManager {
     /**
      * 加载Home页ScrollView
      */
-    public Object getLatestData(String date) {
+    public Object getLatestData(String latestdate) {
         //首先读取缓存中的数据
-        Object object = CacheAtFileManage.getObjectAtFile(C.CacheFileString.LATEST_CACHE_ITEM + date);
+        Object object = CacheAtFileManage.getObjectAtFile(C.CacheFileString.LATEST_CACHE_ITEM + latestdate);
         //如果不为空，则使用，为空，则重新访问网络下载到缓存
         if (object != null) {
             Logger.e("ZhihuContentManager", "getLatestData object不为空");
             return object;
         } else {
-            HttpManager.getInstance().loadLatestInfo(date);
+            HttpManager.getInstance().loadLatestInfo(latestdate);
         }
         return null;
     }

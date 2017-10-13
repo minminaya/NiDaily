@@ -39,7 +39,6 @@ public class HomeFragment extends BaseFragment implements MvpView {
 
     private HomeRecyclerViewAdapter mHomeRecyclerViewAdapter;
     private HomeScrollViewAdapter mHomeScrollViewAdapter = null;
-    private View headview = null;
     private BeforeModel beforeModel = null;
     private LatestInfoModel mLatestInfoModel = null;
     private List<TopStoriesBean> topStoriesBeanList = new ArrayList<>();
@@ -83,8 +82,6 @@ public class HomeFragment extends BaseFragment implements MvpView {
         //首次加载数据
         homeFragmentPresenter.getEventBusEvent(C.EventBusString.FROM_HTTPMANAGER_TO_ZHIHU_CONTENT_MANAGER);
 
-        //头部view数据请求
-        homeFragmentPresenter.loadLatestInfo();
     }
 
 
@@ -100,7 +97,7 @@ public class HomeFragment extends BaseFragment implements MvpView {
                 homeFragmentPresenter.setDateIndex(dateIndex);
                 homeFragmentPresenter.getEventBusEvent(C.EventBusString.FROM_HTTPMANAGER_TO_ZHIHU_CONTENT_MANAGER);
                 //头部view数据请求
-                homeFragmentPresenter.loadLatestInfo();
+
             }
 
             @Override
@@ -134,6 +131,10 @@ public class HomeFragment extends BaseFragment implements MvpView {
      * 将BeforeModel设置到Adapter，并通知更新数据
      */
     public void notifyRecyvlerViewAdapter() {
+        //加载headview数据
+        homeFragmentPresenter.loadLatestInfo();
+
+
         beforeModel = homeFragmentPresenter.getBeforeModel();
         if (isRefresh) {
             //如果本次刷新数据来自下拉，那么把数据添加到头部
@@ -154,13 +155,14 @@ public class HomeFragment extends BaseFragment implements MvpView {
      */
     public void notifyHeadViewAdapter() {
         Logger.e("HomeFragment--notifyHeadViewAdapter", "notifyHeadViewAdapter");
-        if (headview == null) {
+        if (!isRefresh) {
+            //如果不是刷新
             mLatestInfoModel = homeFragmentPresenter.getLatestInfoModel();
             topStoriesBeanList.clear();
             topStoriesBeanList.addAll(mLatestInfoModel.getTop_stories());
 
             //初始化头部View
-            headview = LayoutInflater.from(this.getContext()).inflate(R.layout.view_home_head, null);
+            View headview = LayoutInflater.from(this.getContext()).inflate(R.layout.view_home_head, null);
             UltraViewPager ultraViewPager = headview.findViewById(R.id.ultra_viewpager);
 
             ultraViewPager.setInfiniteLoop(true);
@@ -170,8 +172,9 @@ public class HomeFragment extends BaseFragment implements MvpView {
             mHomeScrollViewAdapter.setTopStoriesBean(topStoriesBeanList);
             ultraViewPager.setAdapter(mHomeScrollViewAdapter);
 
+            Logger.e("HomeFragment--notifyHeadViewAdapter", "if内部");
+
             recyclerView.addHeaderView(headview);
-//            headview = null;//headView回收
         }
 
     }

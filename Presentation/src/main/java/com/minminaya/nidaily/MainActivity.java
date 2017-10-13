@@ -1,6 +1,8 @@
 package com.minminaya.nidaily;
 
+import android.content.Intent;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -16,9 +18,15 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
 
+import com.blankj.utilcode.util.ActivityUtils;
+import com.blankj.utilcode.util.BarUtils;
+import com.blankj.utilcode.util.CleanUtils;
 import com.blankj.utilcode.util.FragmentUtils;
+import com.blankj.utilcode.util.IntentUtils;
 import com.blankj.utilcode.util.SnackbarUtils;
+import com.blankj.utilcode.util.ToastUtils;
 import com.minminaya.library.util.Logger;
+import com.minminaya.nidaily.about.AboutActivity;
 import com.minminaya.nidaily.base.BaseActivity;
 import com.minminaya.nidaily.column.fragment.ColumnFragment;
 import com.minminaya.nidaily.home.fragment.HomeFragment;
@@ -131,6 +139,10 @@ public class MainActivity extends BaseActivity
             @Override
             public void onClick(View v) {
                 Logger.e("MainActivity--navigationView--click", "viewId:" + v.getId());
+                Uri uri = Uri.parse("https://github.com/minminaya/NiDaily");
+                Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                startActivity(intent);
+
             }
         });
 
@@ -153,7 +165,7 @@ public class MainActivity extends BaseActivity
             SnackbarUtils.with(getWindow().getDecorView())
                     .setMessage("要离开我了吗")
                     .setDuration(SnackbarUtils.LENGTH_LONG)
-                    .setBottomMargin(313)
+                    .setBottomMargin(BarUtils.getNavBarHeight())
                     .setBgColor(Color.parseColor("#009688"))
                     .setAction("是", Color.parseColor("#FF4081"), new View.OnClickListener() {
                         @Override
@@ -175,11 +187,17 @@ public class MainActivity extends BaseActivity
         } else if (id == R.id.nav_suggestion) {
 
         } else if (id == R.id.nav_about) {
-
+            ActivityUtils.startActivity(this, AboutActivity.class);
         } else if (id == R.id.nav_manage) {
 
         } else if (id == R.id.nav_share) {
 
+        } else if (id == R.id.nav_clear) {
+            CleanUtils.cleanExternalCache();
+            CleanUtils.cleanInternalCache();
+            ToastUtils.setBgColor(Color.parseColor("#009688"));
+            ToastUtils.setMsgColor(Color.WHITE);
+            ToastUtils.showShort("清除缓存成功");
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

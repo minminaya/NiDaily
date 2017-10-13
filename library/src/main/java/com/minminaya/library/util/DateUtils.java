@@ -1,5 +1,6 @@
 package com.minminaya.library.util;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -27,6 +28,21 @@ public class DateUtils {
         calendar.add(Calendar.DATE, index);
         date = calendar.getTime();
         String str = dateFormat.format(date);
+        Logger.e("DateUtils", "当前时间：" + str);
+        return str;
+    }
+
+
+    public static String convertDate(String indexDate) {
+        SimpleDateFormat inputDateFormat = new SimpleDateFormat("yyyyMMdd");
+        SimpleDateFormat outDateFormat = new SimpleDateFormat("MM月dd日");
+        Date date = null;
+        try {
+            date = inputDateFormat.parse(indexDate);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        String str = outDateFormat.format(date);
         Logger.e("DateUtils", "当前时间：" + str);
         return str;
     }

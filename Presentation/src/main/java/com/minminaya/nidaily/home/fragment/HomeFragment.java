@@ -1,16 +1,19 @@
 package com.minminaya.nidaily.home.fragment;
 
 
+import android.graphics.Color;
 import android.support.v7.widget.LinearLayoutManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 
+import com.blankj.utilcode.util.ToastUtils;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.minminaya.data.http.model.home.BeforeModel;
 import com.minminaya.data.http.model.home.LatestInfoModel;
 import com.minminaya.data.http.model.home.StoriesBean;
 import com.minminaya.data.http.model.home.TopStoriesBean;
+import com.minminaya.library.util.DateUtils;
 import com.minminaya.library.util.Logger;
 import com.minminaya.nidaily.App;
 import com.minminaya.nidaily.C;
@@ -46,7 +49,6 @@ public class HomeFragment extends BaseFragment implements MvpView {
      * 时间的前后标志，用于刷新数据，默认为最新一天
      */
     private int dateIndex = 1;
-    private boolean isRefresh = false;
     private List<StoriesBean> storiesBeanList = new ArrayList<>();
     private HomeFragmentPresenter homeFragmentPresenter = new HomeFragmentPresenter();
 
@@ -81,7 +83,8 @@ public class HomeFragment extends BaseFragment implements MvpView {
 
         //首次加载数据
         homeFragmentPresenter.getEventBusEvent(C.EventBusString.FROM_HTTPMANAGER_TO_ZHIHU_CONTENT_MANAGER);
-
+        //加载headview数据
+        homeFragmentPresenter.loadLatestInfo();
     }
 
 
@@ -91,13 +94,10 @@ public class HomeFragment extends BaseFragment implements MvpView {
             @Override
             public void onRefresh() {
                 Log.d("HomeFragment onRefresh", "onRefresh");
-                dateIndex = 1;
-                //标记当前状态为刷新状态
-                isRefresh = true;
-                homeFragmentPresenter.setDateIndex(dateIndex);
-                homeFragmentPresenter.getEventBusEvent(C.EventBusString.FROM_HTTPMANAGER_TO_ZHIHU_CONTENT_MANAGER);
-                //头部view数据请求
-
+                ToastUtils.setBgColor(Color.parseColor("#009688"));
+                ToastUtils.setMsgColor(Color.WHITE);
+                ToastUtils.showShort("当前数据无更新");
+                recyclerView.refreshComplete();
             }
 
             @Override
@@ -133,18 +133,16 @@ public class HomeFragment extends BaseFragment implements MvpView {
     public void notifyRecyvlerViewAdapter() {
 
         beforeModel = homeFragmentPresenter.getBeforeModel();
-        if (isRefresh) {
-            //如果本次刷新数据来自下拉，那么把数据添加到头部
-            storiesBeanList.addAll(0, beforeModel.getStories());
-            isRefresh = false;
-        } else {
-            storiesBeanList.addAll(beforeModel.getStories());
-            //加载headview数据，刷新情况下不更新headview数据
-            homeFragmentPresenter.loadLatestInfo();
-        }
+
+        //数据添加到list的尾部
+        storiesBeanList.addAll(beforeModel.getStories());
 
         mHomeRecyclerViewAdapter.setStoriesBeanList(storiesBeanList);
         mHomeRecyclerViewAdapter.notifyDataSetChanged();
+
+        ToastUtils.setBgColor(Color.parseColor("#009688"));
+        ToastUtils.setMsgColor(Color.WHITE);
+        ToastUtils.showShort(DateUtils.convertDate(beforeModel.getDate()) + "数据加载成功");
 
         recyclerView.refreshComplete();
     }
@@ -154,27 +152,21 @@ public class HomeFragment extends BaseFragment implements MvpView {
      */
     public void notifyHeadViewAdapter() {
         Logger.e("HomeFragment--notifyHeadViewAdapter", "notifyHeadViewAdapter");
-        if (!isRefresh) {
-            //如果不是刷新
-            mLatestInfoModel = homeFragmentPresenter.getLatestInfoModel();
-            topStoriesBeanList.clear();
-            topStoriesBeanList.addAll(mLatestInfoModel.getTop_stories());
+        mLatestInfoModel = homeFragmentPresenter.getLatestInfoModel();
+        topStoriesBeanList.clear();
+        topStoriesBeanList.addAll(mLatestInfoModel.getTop_stories());
 
-            //初始化头部View
-            View headview = LayoutInflater.from(this.getContext()).inflate(R.layout.view_home_head, null);
-            UltraViewPager ultraViewPager = headview.findViewById(R.id.ultra_viewpager);
+        //初始化头部View
+        View headview = LayoutInflater.from(this.getContext()).inflate(R.layout.view_home_head, null);
+        UltraViewPager ultraViewPager = headview.findViewById(R.id.ultra_viewpager);
 
-            ultraViewPager.setInfiniteLoop(true);
-            ultraViewPager.setAutoScroll(3000);
+        ultraViewPager.setInfiniteLoop(true);
+        ultraViewPager.setAutoScroll(3000);
 
-            mHomeScrollViewAdapter = new HomeScrollViewAdapter();
-            mHomeScrollViewAdapter.setTopStoriesBean(topStoriesBeanList);
-            ultraViewPager.setAdapter(mHomeScrollViewAdapter);
+        mHomeScrollViewAdapter = new HomeScrollViewAdapter();
+        mHomeScrollViewAdapter.setTopStoriesBean(topStoriesBeanList);
+        ultraViewPager.setAdapter(mHomeScrollViewAdapter);
 
-            Logger.e("HomeFragment--notifyHeadViewAdapter", "if内部");
-
-            recyclerView.addHeaderView(headview);
-        }
-
+        recyclerView.addHeaderView(headview);
     }
 }

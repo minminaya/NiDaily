@@ -16,7 +16,7 @@ android {
     }
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
@@ -55,16 +55,6 @@ dependencies {
     compile('com.alibaba.android:ultraviewpager:1.0.4@aar') {
         transitive = true
     }
-    //权限管理
-    compile('com.github.hotchemi:permissionsdispatcher:2.4.0') {
-        // if you don't use android.app.Fragment you can exclude support for them
-        exclude module: "support-v13"
-    }
-
-    //数据库框架GreenDao
-    compile 'org.greenrobot:greendao:3.2.2'
-
-
 
     //Glide
     compile 'com.github.bumptech.glide:glide:3.7.0'

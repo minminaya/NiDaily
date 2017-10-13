@@ -183,7 +183,9 @@ public class MainActivity extends BaseActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_issue) {
-            // Handle the camera action
+            Uri uri = Uri.parse("https://github.com/minminaya/NiDaily/issues");
+            Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+            startActivity(intent);
         } else if (id == R.id.nav_suggestion) {
 
         } else if (id == R.id.nav_about) {

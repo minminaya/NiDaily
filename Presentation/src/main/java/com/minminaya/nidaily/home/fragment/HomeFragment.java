@@ -131,9 +131,6 @@ public class HomeFragment extends BaseFragment implements MvpView {
      * 将BeforeModel设置到Adapter，并通知更新数据
      */
     public void notifyRecyvlerViewAdapter() {
-        //加载headview数据
-        homeFragmentPresenter.loadLatestInfo();
-
 
         beforeModel = homeFragmentPresenter.getBeforeModel();
         if (isRefresh) {
@@ -142,6 +139,8 @@ public class HomeFragment extends BaseFragment implements MvpView {
             isRefresh = false;
         } else {
             storiesBeanList.addAll(beforeModel.getStories());
+            //加载headview数据，刷新情况下不更新headview数据
+            homeFragmentPresenter.loadLatestInfo();
         }
 
         mHomeRecyclerViewAdapter.setStoriesBeanList(storiesBeanList);

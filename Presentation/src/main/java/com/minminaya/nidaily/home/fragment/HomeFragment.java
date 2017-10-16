@@ -6,6 +6,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.ProgressBar;
 
 import com.blankj.utilcode.util.ToastUtils;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
@@ -36,6 +37,7 @@ import butterknife.BindView;
  */
 public class HomeFragment extends BaseFragment implements MvpView {
     private static final HomeFragment homeFragment = new HomeFragment();
+
 
     @BindView(R.id.recycler_view_home_fragment)
     XRecyclerView recyclerView;

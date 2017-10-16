@@ -53,13 +53,13 @@
                         android:textSize="22sp" />
 
                     <TextView
-                        android:text=""
                         android:id="@+id/tv_image_source_at_web_content_activity"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="bottom|right"
                         android:layout_marginBottom="5dp"
                         android:padding="5dp"
+                        android:text=""
                         android:textColor="@android:color/white"
                         android:textSize="12sp" />
                 </FrameLayout>
@@ -82,9 +82,10 @@
                 android:overScrollMode="never" />
         </android.support.v4.widget.NestedScrollView>
     </android.support.design.widget.CoordinatorLayout>
+
     <ProgressBar
         android:id="@+id/progressBar"
-        android:layout_gravity="center"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_gravity="center" />
 </FrameLayout>

@@ -1,6 +1,12 @@
 # NiDaily
 使用知乎日报API创建的的NiDaily，基于MVP模式
 
+简书同步
+
+[基于知乎日报API的NiDaily--（1）](http://www.jianshu.com/p/0cbc99412f1f)
+
+[基于知乎日报API的NiDaily--（2）--分析](http://www.jianshu.com/p/8f02133dcfe2)
+
 #基本界面
 
 ![Screenshot_2017-10-16-12-21-12.png](http://upload-images.jianshu.io/upload_images/3515789-676ff7c15986ba5f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)

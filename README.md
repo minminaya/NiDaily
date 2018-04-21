@@ -7,31 +7,24 @@
 
 [基于知乎日报API的NiDaily--（2）--分析](http://www.jianshu.com/p/8f02133dcfe2)
 
-#基本界面
+---
 
-![Screenshot_2017-10-16-12-21-12.png](http://upload-images.jianshu.io/upload_images/3515789-676ff7c15986ba5f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+# 预览
 
-
-![Screenshot_2017-10-16-12-21-16.png](http://upload-images.jianshu.io/upload_images/3515789-0355780fcbdd2f9e.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
-
-
-![Screenshot_2017-10-16-12-21-20.png](http://upload-images.jianshu.io/upload_images/3515789-39723ccd5616ba05.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
-
-
-![Screenshot_2017-10-16-12-21-30.png](http://upload-images.jianshu.io/upload_images/3515789-43b37c90654db5d8.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
-
-
-![Screenshot_2017-10-16-12-21-34.png](http://upload-images.jianshu.io/upload_images/3515789-a77e6ebee31a5df5.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
-
-
-![Screenshot_2017-10-16-12-21-43.png](http://upload-images.jianshu.io/upload_images/3515789-91083e26e98a76ee.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
-
-
-![Screenshot_2017-10-16-12-21-51.png](http://upload-images.jianshu.io/upload_images/3515789-580526a96dcf3d4e.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
-
-
-![Screenshot_2017-10-16-12-21-25.png](http://upload-images.jianshu.io/upload_images/3515789-6e55c0919f770e94.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
-
+<div align="center">
+<img src="http://upload-images.jianshu.io/upload_images/3515789-676ff7c15986ba5f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" height="384" width="216" >
+<img src="http://upload-images.jianshu.io/upload_images/3515789-0355780fcbdd2f9e.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" height="384" width="216" >
+<img src="http://upload-images.jianshu.io/upload_images/3515789-39723ccd5616ba05.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" height="384" width="216" >
+<img src="http://upload-images.jianshu.io/upload_images/3515789-43b37c90654db5d8.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" height="384" width="216" >
+ </div>
+ 
+<div align="center">
+<img src="http://upload-images.jianshu.io/upload_images/3515789-a77e6ebee31a5df5.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" height="384" width="216" >
+<img src="http://upload-images.jianshu.io/upload_images/3515789-91083e26e98a76ee.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" height="384" width="216" >
+<img src="http://upload-images.jianshu.io/upload_images/3515789-580526a96dcf3d4e.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" height="384" width="216" >
+ <img src="http://upload-images.jianshu.io/upload_images/3515789-6e55c0919f770e94.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" height="384" width="216" >
+ </div>
+ 
 ---
 
 #下面是模拟器的gif

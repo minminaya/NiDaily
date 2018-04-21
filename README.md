@@ -29,28 +29,16 @@
  
 ---
 
-#下面是模拟器的gif
+# 下面是模拟器的gif
 
 <div align="center">
 <img src="http://upload-images.jianshu.io/upload_images/3515789-17abf1db7312d3dc.gif?imageMogr2/auto-orient/strip" height="384" width="216" >
-<img src="http://upload-images.jianshu.io/upload_images/3515789-0355780fcbdd2f9e.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" height="384" width="216" >
-<img src="http://upload-images.jianshu.io/upload_images/3515789-39723ccd5616ba05.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" height="384" width="216" >
-<img src="http://upload-images.jianshu.io/upload_images/3515789-43b37c90654db5d8.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" height="384" width="216" >
+<img src="http://upload-images.jianshu.io/upload_images/3515789-f69b0b74e31a7bad.gif?imageMogr2/auto-orient/strip" height="384" width="216" >
+<img src="http://upload-images.jianshu.io/upload_images/3515789-578b132dcdb77b90.gif?imageMogr2/auto-orient/strip" height="384" width="216" >
+<img src="http://upload-images.jianshu.io/upload_images/3515789-d8e7cc634c7b8d93.gif?imageMogr2/auto-orient/strip" height="384" width="216" >
  </div>
 
-![home1.gif](http://upload-images.jianshu.io/upload_images/3515789-17abf1db7312d3dc.gif?imageMogr2/auto-orient/strip)
 
-
-![hot1.gif](http://upload-images.jianshu.io/upload_images/3515789-f69b0b74e31a7bad.gif?imageMogr2/auto-orient/strip)
-
-
-![theme1.gif](http://upload-images.jianshu.io/upload_images/3515789-578b132dcdb77b90.gif?imageMogr2/auto-orient/strip)
-
-
-![column1.gif](http://upload-images.jianshu.io/upload_images/3515789-d8e7cc634c7b8d93.gif?imageMogr2/auto-orient/strip)
-
-
-![content1.gif](http://upload-images.jianshu.io/upload_images/3515789-15cfe64b2acedb83.gif?imageMogr2/auto-orient/strip)
 
 #分析
 

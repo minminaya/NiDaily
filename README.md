@@ -1,7 +1,9 @@
 # NiDaily
 使用知乎日报API创建的的NiDaily，基于MVP模式
 
-简书同步
+---
+
+# 简书同步
 
 [基于知乎日报API的NiDaily--（1）](http://www.jianshu.com/p/0cbc99412f1f)
 
@@ -29,7 +31,12 @@
 
 #下面是模拟器的gif
 
-> ps：模拟器有点卡顿
+<div align="center">
+<img src="http://upload-images.jianshu.io/upload_images/3515789-17abf1db7312d3dc.gif?imageMogr2/auto-orient/strip" height="384" width="216" >
+<img src="http://upload-images.jianshu.io/upload_images/3515789-0355780fcbdd2f9e.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" height="384" width="216" >
+<img src="http://upload-images.jianshu.io/upload_images/3515789-39723ccd5616ba05.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" height="384" width="216" >
+<img src="http://upload-images.jianshu.io/upload_images/3515789-43b37c90654db5d8.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" height="384" width="216" >
+ </div>
 
 ![home1.gif](http://upload-images.jianshu.io/upload_images/3515789-17abf1db7312d3dc.gif?imageMogr2/auto-orient/strip)
 

@@ -32,7 +32,7 @@
 # 下面是模拟器的gif
 
 <div align="left">
-<img src="http://upload-images.jianshu.io/upload_images/3515789-17abf1db7312d3dc.gif?imageMogr2/auto-orient/strip" height="384" width="216" >
+<img src="http://upload-images.jianshu.io/upload_images/3515789-17abf1db7312d3dc.gif?imageMogr2/auto-orient/strip" height="576" width="324" >
 <img src="http://upload-images.jianshu.io/upload_images/3515789-f69b0b74e31a7bad.gif?imageMogr2/auto-orient/strip" height="384" width="216" >
 <img src="http://upload-images.jianshu.io/upload_images/3515789-578b132dcdb77b90.gif?imageMogr2/auto-orient/strip" height="384" width="216" >
 
